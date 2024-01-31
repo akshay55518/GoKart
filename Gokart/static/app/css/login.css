@@ -1,0 +1,97 @@
+.container1{
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: fit-content;
+    padding: 15px;
+}
+.input-field {
+  position: relative;
+  border-bottom: 2px solid #ccc;
+  margin: 15px 0;
+}
+
+.input-field label {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  color: #000000;
+  font-size: 16px;
+  pointer-events: none;
+  transition: 0.15s ease;
+}
+
+.input-field input {
+  width: 100%;
+  height: 40px;
+  /* background: transparent; */
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #000000;
+}
+
+.input-field input:focus~label,
+.input-field input:valid~label {
+  font-size: 0.8rem;
+  top: 10px;
+  transform: translateY(-120%);
+}
+
+.forget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 25px 0 35px 0;
+  color: #000000;
+}
+
+#Save-login {
+  accent-color: #000000;
+}
+
+.forget label {
+  display: flex;
+  align-items: center;
+}
+
+.forget label p {
+  margin-left: 8px;
+}
+
+.container1 a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.container1 a:hover {
+  text-decoration: underline;
+}
+
+button {
+  background: #0bd85a;
+  color: #000000;
+  border: none;
+  padding: 1px 15px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 16px;
+  border: 2px solid transparent;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  color: #000000;
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.create-account {
+  text-align: center;
+  margin-top: 30px;
+  color: #000000;
+}
