@@ -31,11 +31,12 @@
 {% block main-content %}
 <link rel="stylesheet" href="{% static 'app/css/home.css'%}">
 
-<div class="container-fluid container1 row d-flex gap-3  ">
+<div class="container container1 card p-3  ">
+    
     <h3>View Items</h3>
-
-    {% for product in product %}
-    <div class="card mt-2 card1" style="width: 18rem;">
+    <div class="row gap-3 d-flex justify-content-center ">
+        {% for product in product %}
+    <div class="card shadow mt-2 card1" style="width: 18rem;">
         <a href="{% url 'product-detail' product.id %}" class="text-decoration-none text-bg-dark ">
             <img src="{{product.product_image.url}}" class="card-img-top" alt="{{product.title}}" width="auto" height="250px">
             <div class="card-body">
@@ -59,15 +60,15 @@
         </a>
       </div>
       {% endfor %}
-    
+    </div>   
 </div>
-
-<div class="container-fluid container1  row d-flex justify-content-center gap-3  ">
+<br>
+<div class="container container1 card gap-3 p-3  ">
 <h3>Categories</h3>
-
+<div class="row d-flex justify-content-center gap-3 ">
     {% for category in category %}
     <!-- <p>{{category.id}}</p> -->
-    <div class="col-md-4 col-sm-4 mt-4  fadeInUp w-25 " >
+    <div class="col-md-4 col-sm-4 mt-4  fadeInUp w-25 shadow" >
         <div class="card object-fit-fill">
             <a href="{% url 'category' category.id %}" class="text-decoration-none">
                 <div class="text-center">
@@ -78,6 +79,8 @@
         </div>
     </div>
     {% endfor %}
+</div>
+    
 </div>
 
 

@@ -23,7 +23,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success ">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success   h-auto">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">GoKart
                 <!-- <img src="{% static 'app/images/Neel.png' %}" width="70" height="50"> -->
@@ -46,8 +46,14 @@
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Products
                         </a>
+                        <!-- {% for i in category %}
+                        <a href="{% url 'category' i.id %}">
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li class="dropdown-item">{{i.title}}</li>
+                        </ul></a>
+                        {% endfor %} -->
                         {% for i in category %}
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="{% url 'category' i.id %}">{{i.title}}</a></li>
                             <li><a class="dropdown-item" href="{% url 'category' 'La'%}">laptops</a></li>
                             <li><a class="dropdown-item" href="{% url 'category' 'El'%}">Electronics</a></li>
@@ -85,6 +91,10 @@
                         <a href="#" class="nav-link text-white ">
                             <span class="material-symbols-outlined">favorite</span>
                             WishList 4</a>
+                    </li>
+                    <li class="nav-item mx-2 ">
+                        <a href="{% url 'logout' %}" class="nav-link text-white ">
+                            Logout</a>
                     </li>
                     </ul>
                     {%  else %}
@@ -132,7 +142,7 @@
     {% block main-content %} {% endblock main-content %}
 
 <br><br>
-    <footer class="container-fluid  bg-success fixed-bottom ">
+    <footer class="container-fluid bg-success">
         <div class="d-flex justify-content-between">
             <div class="text-white">
                 <p>&copy; Developed by: Akshay</p>

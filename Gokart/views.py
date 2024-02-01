@@ -3,7 +3,7 @@ from .models import Product,Category,Banner,Customer
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate
-from .forms import CustomerRegistrationForm,CustomerProfileForm
+from .forms import CustomerRegistrationForm,CustomerProfileForm,MyPasswordResetForm
 from django.contrib.auth import logout
 
 #user autentication
@@ -26,7 +26,13 @@ def login(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+def forgetpassword(request):
+    email=MyPasswordResetForm()
+    return render(request,'app/password_reset_done.html',locals())
     
+    
+        
     
 # Create your views here.
 def home(request):
