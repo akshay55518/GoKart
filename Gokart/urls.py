@@ -6,17 +6,35 @@ from django.contrib.auth import views as auth_view
 from .forms import LoginForm,MyPasswordChangeForm,MySetPasswordForm,MyPasswordResetForm
 
 urlpatterns = [
+    #home section
     path('', views.home),
     path('about-us',views.aboutus,name='about-us'),
     path('contact-us',views.contactus,name='contact-us'),
     
+    #category, profile 
     path('category/<slug:val>',views.category,name='category'),
     path('product-detail/<int:pk>',views.productdetail,name='product-detail'),
     path('profile/',views.profileview,name='profile'),
     path('address/',views.address,name='address'),
     path('address-update/<int:pk>',views.updateaddress,name='address-update'),
     
+    #cart section
+    path('cart/',views.show_cart,name='show-cart'),
+    path('add-to-cart/',views.add_to_card,name='add-to-cart'),
+    path('checkout/',views.checkout,name='checkout'),
+    path('orders/',views.home,name='orders'),
+    #payment
+    path('paymentdone/',views.payment_done,name='payment-done'),
     
+    #cart button action
+    path('pluscart/',views.plus_cart),
+    path('minuscart/',views.minus_cart),
+    path('removecart/',views.remove_cart,name='remove-cart'),
+    
+    
+
+    
+    #Admin section
     path('admin-dashboard',views.admin_dashboard,name='admin-dashboard'),
     
     #login authentication

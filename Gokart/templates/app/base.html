@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{% static 'app/css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static 'app/css/all.min.css' %}">
     <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <title>Products | {% block title %}{% endblock title %}</title>
 </head>
@@ -74,7 +75,7 @@
                             <span class="material-symbols-outlined">
                                 person
                             </span>
-                            {{request.user}}
+                            {{request.user|capfirst}}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                             <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
@@ -83,7 +84,7 @@
                             <li><a class="dropdown-item" href="{% url 'logout' %}">logOut</a></li>
                         </ul>
                     <li class="nav-item mx-2 ">
-                        <a href="#" class="nav-link text-white ">
+                        <a href="{% url 'show-cart' %}" class="nav-link text-white ">
                             <span class="material-symbols-outlined">shopping_cart</span>
                             Cart 4</a>
                     </li>
@@ -141,8 +142,10 @@
 
     {% block main-content %} {% endblock main-content %}
 
+    {% block payment-gateway %} {% endblock payment-gateway %}
+
 <br><br>
-    <footer class="container-fluid bg-success">
+    <footer class="container-fluid bg-success fixed-bottom">
         <div class="d-flex justify-content-between">
             <div class="text-white">
                 <p>&copy; Developed by: Akshay</p>
@@ -160,6 +163,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+
     <script src="{% static 'app/js/all.min.js' %}"></script>
     <script src="{% static 'app/js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'app/js/script.js' %}"></script>
