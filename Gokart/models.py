@@ -90,12 +90,16 @@ STATUS=(
 
 class Payment(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
-    amount=models.FloatField()
+    amount=models.IntegerField()
     razorpay_order_id=models.CharField(max_length=100,blank=True,null=True)
     razorpay_payment_status=models.CharField(max_length=100,blank=True,null=True)
     razorpay_payment_id=models.CharField(max_length=100,blank=True,null=True)
     paid=models.BooleanField(default=False)
-    
+
+# PAYMENT=(
+#     ("COD","Cash on Delivery"),
+#     ("RazorPay","RazorPay"),
+# )
     
 class OrderPlaced(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -104,6 +108,7 @@ class OrderPlaced(models.Model):
     quantity=models.PositiveBigIntegerField(default=1)
     ordered_date=models.DateTimeField(auto_now_add=True)
     status=models.CharField(max_length=50,choices=STATUS,default='')
+    # payment=models.CharField(max_length=100,choices=PAYMENT)
     payment=models.ForeignKey(Payment,on_delete=models.CASCADE,default='')
     @property
     def total_cost(self):

@@ -216,22 +216,20 @@ def checkout(request):
         user=request.user
         add=Customer.objects.filter(user=user)
         cart_item=Cart.objects.filter(user=user)
-        amount=0
+        famount=0
         for p in cart_item:
             value=p.quantity*p.product.discount_price
-            amount=amount+value
-        if amount>1000:
-            totalamount=amount
-        elif amount==0:
+            famount=famount+value
+        if famount>1000:
+            totalamount=famount
+        elif famount==0:
             totalamount=0
         else:
-            totalamount=amount+100
-        return render(request,'app/checkout.html',locals())
-    
-    elif request.method=='POST':
-        razoramount=int(totalamount*1000)
+            totalamount=famount+100
+        totalamount1=totalamount*100
+        razoramount=int(totalamount1)
         client=razorpay.Client(auth=(settings.RAZOR_KEY_ID,settings.RAZOR_KEY_SECRET))
-        data={'amount':razoramount,'currency':'INR','receipt':'order_rcptid_12'}
+        data={'amount': razoramount,'currency':'INR','receipt':'order_rcptid_12'}
         payment_response=client.order.create(data=data)
         print(payment_response)
         order_id=payment_response['id']
@@ -243,7 +241,8 @@ def checkout(request):
                 razorpay_payment_status=order_status,
             )
             payment.save()
-        return redirect('orders')
+        return render(request,'app/checkout.html',locals())
+
     # elif request.method=='POST':
     #     user=request.user
     #     customer=Customer.objects.filter(user=user)
@@ -251,8 +250,6 @@ def checkout(request):
     #     for c in cart_item:
     #         OrderPlaced(user=user,customer=customer,product=c.product,quantity=c.quantity,payment="done").save()
     #     c.delete()
-    
-    return render(request,'app/checkout.html',locals())
 
 def payment_done(request):
     order_id=request.GET.get('order_id')
@@ -260,7 +257,7 @@ def payment_done(request):
     cust_id=request.GET.get('cust_id')
     user=request.user
     customer=Customer.objects.get(id=cust_id)
-    payment=Payment.objectsget(razorpay_order_id=order_id)
+    payment=Payment.objects.get(razorpay_order_id=order_id)
     payment.paid=True
     payment.razorpay_payment_id=payment_id
     payment.save()
