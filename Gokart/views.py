@@ -212,33 +212,46 @@ def remove_cart(request):
     
     
 def checkout(request):
-    user=request.user
-    add=Customer.objects.filter(user=user)
-    cart_item=Cart.objects.filter(user=user)
-    amount=0
-    for p in cart_item:
-        value=p.quantity*p.product.discount_price
-        amount=amount+value
-    if amount>1000:
-        totalamount=amount
-    elif amount==0:
-        totalamount=0
-    else:
-        totalamount=amount+100
-    razoramount=int(totalamount*100)
-    client=razorpay.Client(auth=(settings.RAZOR_KEY_ID,settings.RAZOR_KEY_SECRET))
-    data={'amount':razoramount,'currency':'INR','receipt':'order_rcptid_12'}
-    payment_response=client.order.create(data=data)
-    print(payment_response)
-    order_id=payment_response['id']
-    order_status=payment_response['status']
-    if order_status=='created':
-        payment=Payment(
-            user=user,
-            razorpay_order_id=order_id,
-            razorpay_payment_status=order_status,
-        )
-        payment.save()
+    if request.method=='GET':
+        user=request.user
+        add=Customer.objects.filter(user=user)
+        cart_item=Cart.objects.filter(user=user)
+        amount=0
+        for p in cart_item:
+            value=p.quantity*p.product.discount_price
+            amount=amount+value
+        if amount>1000:
+            totalamount=amount
+        elif amount==0:
+            totalamount=0
+        else:
+            totalamount=amount+100
+        return render(request,'app/checkout.html',locals())
+    
+    elif request.method=='POST':
+        razoramount=int(totalamount*1000)
+        client=razorpay.Client(auth=(settings.RAZOR_KEY_ID,settings.RAZOR_KEY_SECRET))
+        data={'amount':razoramount,'currency':'INR','receipt':'order_rcptid_12'}
+        payment_response=client.order.create(data=data)
+        print(payment_response)
+        order_id=payment_response['id']
+        order_status=payment_response['status']
+        if order_status=='created':
+            payment=Payment(
+                user=user,
+                razorpay_order_id=order_id,
+                razorpay_payment_status=order_status,
+            )
+            payment.save()
+        return redirect('orders')
+    # elif request.method=='POST':
+    #     user=request.user
+    #     customer=Customer.objects.filter(user=user)
+    #     cart_item=Cart.objects.filter(user=user)
+    #     for c in cart_item:
+    #         OrderPlaced(user=user,customer=customer,product=c.product,quantity=c.quantity,payment="done").save()
+    #     c.delete()
+    
     return render(request,'app/checkout.html',locals())
 
 def payment_done(request):
