@@ -28,9 +28,8 @@
 
                     <div class="mb-3 d-flex justify-content-between" >
                         <small class="h6 text-decoration-line-through text-danger ">
-                            <span class="material-symbols-outlined">
-                                currency_rupee
-                            </span>{{product.selling_price}}</small>
+                            <span class="material-symbols-outlined">currency_rupee</span>
+                            {{product.selling_price}}</small>
                         <p class="h4"><span class="material-symbols-outlined">currency_rupee</span>
                             {{product.discount_price}}</p>
                     </div>
@@ -50,12 +49,11 @@
                         <form action="/add-to-cart" method="">
                         <input type="hidden" name="prod_id" value="{{product.id}}">
                         <button class="btn btn-primary">
-                            <span class="material-symbols-outlined">shopping_cart</span>
-                            <span class="text">Add to cart</span>
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>Add to cart</span>
                         </button>
                         </form>
                         <a href="{% url 'show-cart' %}" class="btn btn-dark">
-                            <span class="material-symbols-outlined">shopping_bag</span>
+                            <i class="fa fa-shopping-bag" aria-hidden="true"></i>
                             <span class="text">Buy Now</span>
                         </a>
                     </div>

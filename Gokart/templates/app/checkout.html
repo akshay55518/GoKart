@@ -22,7 +22,7 @@
                     <div class="d-flex justify-content-between ">
                     <h5>{{item.product.title}}</h5>
                     <a class="remove-cart btn " pid="{{item.product.id}}" >
-                        <span class="material-symbols-outlined">
+                        <span class="material-symbols-outlined" style="font-size: 24px;">
                         delete
                         </span>
                     </a>
@@ -51,8 +51,7 @@
                 <div class="card gap-3">
                     <div class="card-header-tabs">
                         <div class="form-check  mt-2 mb-5">
-                            <label class="form-check-label fw-bold  " for="custadd{{forloop.counter}}">
-                                Address:{{forloop.counter}} </label>
+                            <label class="form-check-label fw-bold  " for="custadd{{forloop.counter}}">Address:{{forloop.counter}} </label>
                             <input type="radio" class="form-check-input" name="custid" id="custadd{{forloop.counter}}" value="{{ad.id}}">
                         </div>
                     </div>

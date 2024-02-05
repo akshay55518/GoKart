@@ -28,51 +28,67 @@ class CustomerRegistrationView(View):
             messages.warning(request,"Error in Registration")
         return render(request,'app/registration.html',locals())
     
-def login(request):
-    return render(request,'app/login.html')
+# def login(request):
+#     return render(request,'app/login.html')
 
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-def forgetpassword(request):
-    email=MyPasswordResetForm()
+def get_password_reset_url(request):
+    # email=MyPasswordResetForm()
     base64_encoded_id = utils.http.urlsafe_base64_encode(utils.encoding.force_bytes(request.id))
     token = PasswordResetTokenGenerator().make_token(request)
     reset_url_args = {'uidb64': base64_encoded_id, 'token': token}
     reset_path = reverse('password_reset_confirm', kwargs=reset_url_args)
     reset_url = f'{settings.BASE_URL}{reset_path}'
-    a='akshay'
-    return render(request,'app/password_reset_done.html',locals())
+    return reset_url
+    # return render(request,'app/password_reset_done.html',locals())
     
-    
-        
     
 # Create your views here.
 def home(request):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
     banner=Banner.objects.all()
     category=Category.objects.all()
     product=Product.objects.all()
     # id=Product.objects.filter().values('id')
     obj={'category':category,'product':product,'banner':banner,'id':id}
-    return render(request,'app/home.html',obj)
+    return render(request,'app/home.html',locals())
 
 def aboutus(request):
-    return render(request,'app/about-us.html')
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
+    return render(request,'app/about-us.html',locals())
 
 def contactus(request):
-    return render(request,'app/contact-us.html')
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
+    return render(request,'app/contact-us.html',locals)
 
 def category(request,val):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
     product=Product.objects.filter(category=val)
     # title=Product.objects.filter(category=val).values('id')
     return render(request,'app/category.html',locals())
 
 def productdetail(request,pk):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
     product=Product.objects.get(pk=pk)
     return render(request,'app/product-detail.html',locals())
 
 def profileview(request):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
     if request.method=='POST':
         form=CustomerProfileForm(request.POST)
         if form.is_valid():
@@ -95,10 +111,16 @@ def profileview(request):
         return render(request,"app/profile-view.html", locals())
     
 def address(request):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
     add=Customer.objects.filter(user=request.user)
     return render(request,'app/address.html',locals()) 
 
 def updateaddress(request,pk):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
     if request.method=='POST':
         form=CustomerProfileForm(request.POST)
         if form.is_valid():
@@ -121,6 +143,9 @@ def updateaddress(request,pk):
     
 #cart section
 def add_to_card(request):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
     user=request.user
     product_id=request.GET.get('prod_id')
     product=Product.objects.get(id=product_id)
@@ -129,6 +154,9 @@ def add_to_card(request):
     
 
 def show_cart(request):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
     user=request.user
     cart=Cart.objects.filter(user=user)
     amount=0
@@ -140,7 +168,6 @@ def show_cart(request):
     else:
         totalamount=amount+40
     return render(request,'app/add-tocart.html',locals())
-
 
 
 def plus_cart(request):
@@ -212,6 +239,9 @@ def remove_cart(request):
     
     
 def checkout(request):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
     if request.method=='GET':
         user=request.user
         add=Customer.objects.filter(user=user)
@@ -226,21 +256,21 @@ def checkout(request):
             totalamount=0
         else:
             totalamount=famount+100
-        totalamount1=totalamount*100
+        totalamount1=totalamount
         razoramount=int(totalamount1)
         client=razorpay.Client(auth=(settings.RAZOR_KEY_ID,settings.RAZOR_KEY_SECRET))
         data={'amount': razoramount,'currency':'INR','receipt':'order_rcptid_12'}
         payment_response=client.order.create(data=data)
         print(payment_response)
-        order_id=payment_response['id']
-        order_status=payment_response['status']
-        if order_status=='created':
-            payment=Payment(
-                user=user,
-                razorpay_order_id=order_id,
-                razorpay_payment_status=order_status,
-            )
-            payment.save()
+        # order_id=payment_response['id']
+        # order_status=payment_response['status']
+        # if order_status=='created':
+        #     payment=Payment(
+        #         user=user,
+        #         razorpay_order_id=order_id,
+        #         razorpay_payment_status=order_status,
+        #     )
+        #     payment.save()
         return render(request,'app/checkout.html',locals())
 
     # elif request.method=='POST':

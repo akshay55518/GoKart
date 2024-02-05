@@ -73,8 +73,6 @@ class Cart(models.Model):
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
     quantity=models.PositiveIntegerField(default=1)
     date_added=models.DateField(auto_now_add=True)
-
-
     @property
     def total_cost(self):
         return self.quantity * self.Product.discount_price
@@ -90,7 +88,7 @@ STATUS=(
 
 class Payment(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
-    amount=models.IntegerField()
+    amount=models.DecimalField(max_digits=10,decimal_places=2)
     razorpay_order_id=models.CharField(max_length=100,blank=True,null=True)
     razorpay_payment_status=models.CharField(max_length=100,blank=True,null=True)
     razorpay_payment_id=models.CharField(max_length=100,blank=True,null=True)
