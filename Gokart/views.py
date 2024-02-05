@@ -256,21 +256,21 @@ def checkout(request):
             totalamount=0
         else:
             totalamount=famount+100
-        totalamount1=totalamount
-        razoramount=int(totalamount1)
+        totalamount1=totalamount*100
+        razoramount=float(totalamount1)
         client=razorpay.Client(auth=(settings.RAZOR_KEY_ID,settings.RAZOR_KEY_SECRET))
         data={'amount': razoramount,'currency':'INR','receipt':'order_rcptid_12'}
         payment_response=client.order.create(data=data)
         print(payment_response)
-        # order_id=payment_response['id']
-        # order_status=payment_response['status']
-        # if order_status=='created':
-        #     payment=Payment(
-        #         user=user,
-        #         razorpay_order_id=order_id,
-        #         razorpay_payment_status=order_status,
-        #     )
-        #     payment.save()
+        order_id=payment_response['id']
+        order_status=payment_response['status']
+        if order_status=='created':
+            payment=Payment(
+                user=user,
+                razorpay_order_id=order_id,
+                razorpay_payment_status=order_status,
+            )
+            payment.save()
         return render(request,'app/checkout.html',locals())
 
     # elif request.method=='POST':
