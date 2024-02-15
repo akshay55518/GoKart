@@ -17,6 +17,7 @@ urlpatterns = [
     path('profile/',views.profileview,name='profile'),
     path('address/',views.address,name='address'),
     path('address-update/<int:pk>',views.updateaddress,name='address-update'),
+    path('delete-address/<int:pk>',views.deleteaddress,name='delete-address'),
     
     #cart section
     path('cart/',views.show_cart,name='show-cart'),
@@ -31,11 +32,16 @@ urlpatterns = [
     path('minuscart/',views.minus_cart),
     path('removecart/',views.remove_cart,name='remove-cart'),
     
-    
-
-    
     #Admin section
     path('admin-dashboard',views.admin_dashboard,name='admin-dashboard'),
+    
+    #wishlist
+    path('wishlist/', views.wishlist, name='wishlist'),
+    path('wishlist/add/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('wishlist/remove/<int:wishlist_item_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+    
+    #search
+    path('search/', views.search_results, name='search_results'),
     
     #login authentication
     path('registration',views.CustomerRegistrationView.as_view(),name='customer-registration'),

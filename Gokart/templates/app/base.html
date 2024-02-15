@@ -75,9 +75,9 @@
                             Cart <span class="badge bg-danger "> {{totalitem}}</span></a>
                     </li>
                     <li class="nav-item mx-2 ">
-                        <a href="#" class="nav-link text-white ">
+                        <a href="{% url 'wishlist' %}" class="nav-link text-white ">
                             <span class="material-symbols-outlined">favorite</span>
-                            WishList 4</a>
+                            WishList <span class="badge bg-danger ">{{totalitem1}}</span></a>
                     </li>
                     <li class="nav-item mx-2 ">
                         <a href="{% url 'logout' %}" class="nav-link text-white ">
@@ -97,10 +97,13 @@
                 {% endif %}
                 {% if request.user.is_authenticated %}
                 <div class="d-flex float-end">
-                    <form class="d-flex ">
-                        <input class="form-control w-100 h-75" type="search"  placeholder="Search.." aria-label="Search">
-                        <button class="btn text-light h-75  " type="submit">Search</button>
-                    </form>
+                    <div class="pt-3">
+                        <form action="{% url 'search_results' %}" method="GET" class="p-1">
+                            <input type="text" name="search" placeholder="Search...">
+                            <button type="submit" class="btn text-white ">Search</button>
+                        </form>
+                    </div>
+                    
                     <ul>
                         <li class="navbar-nav ">
                             <div class="checkbox-wrapper-17">

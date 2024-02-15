@@ -2,7 +2,6 @@
 {% load static %}
 {% block title %}Address{% endblock title %}
 
-
 {% block main-content %}
 
 <div class="container">
@@ -24,8 +23,12 @@
                         <div class="card-body ">
                             <div class="card-title d-flex justify-content-between  ">
                                 <h4>Address:{{forloop.counter}}</h4>
-                                <button onclick="select()" class="material-symbols-outlined btn btn-default">
-                                    radio_button_unchecked
+                                <button class="btn">
+                                    <a href="{% url 'delete-address' pk=ad.id %}" class="text-decoration-none">
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
+                                    </a>   
                                 </button>
                             </div>
                             <hr>

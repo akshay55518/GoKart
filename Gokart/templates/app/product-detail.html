@@ -20,7 +20,7 @@
                 <div class="content-body">
                     <div class="d-flex justify-content-between ">
                         <h2 class="title">{{product.title}}</h2>
-                        <a href="" class="text-decoration-none ">
+                        <a href="{% url 'add_to_wishlist' product.id %}" class="text-decoration-none ">
                             <span class="material-symbols-outlined">
                                 favorite
                             </span></a>

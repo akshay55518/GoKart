@@ -38,10 +38,14 @@
         {% for product in product %}
     <div class="card shadow object-fit-contain " style="width: 18rem;">
         <div class="d-flex justify-content-end "> 
-            <a href="" class="btn">
-            <span class="material-symbols-outlined">
-            favorite
-            </span></a>
+            <form action="{% url 'add_to_wishlist' product.id %}" method="post">
+                {% csrf_token %}
+                <button class="btn">
+                    <span class="material-symbols-outlined">
+                    favorite
+                    </span>
+                </button>
+            </form>
         </div>
         <a href="{% url 'product-detail' product.id %}" class="text-decoration-none text-bg-dark ">
             <img src="{{product.product_image.url}}" class="card-img" alt="{{product.title}}" width="auto" height="250px">

@@ -111,3 +111,10 @@ class OrderPlaced(models.Model):
     @property
     def total_cost(self):
         return self.quantity*self.product.discount_price
+    
+class WishListItem(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    product=models.ForeignKey(Product,on_delete=models.CASCADE)
+    added_at=models.DateField(auto_now_add=True)
+    def  __str__(self):
+        return self.user
