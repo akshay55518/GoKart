@@ -135,5 +135,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('traces_email')
 EMAIL_HOST_PASSWORD = os.environ.get('traces_email_password')
 
-RAZOR_KEY_ID='rzp_test_67qhJUdlZCqsHS'
-RAZOR_KEY_SECRET='3Iel8dV9TfQwZU5TgpiJDwJr'
+RAZOR_API_KEY='rzp_test_67qhJUdlZCqsHS'
+RAZOR_API_SECRET_KEY='3Iel8dV9TfQwZU5TgpiJDwJr'

@@ -12,6 +12,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
 from django.http import JsonResponse
 from django.db.models import Q
+from Ecommerce.settings import RAZOR_API_KEY,RAZOR_API_SECRET_KEY
 import razorpay
 
 #user autentication
@@ -46,6 +47,7 @@ def get_password_reset_url(request):
     # return render(request,'app/password_reset_done.html',locals())
     
     
+    
 # Create your views here.
 def home(request):
     totalitem=0
@@ -75,7 +77,20 @@ def category(request,val):
     if request.user.is_authenticated:
         totalitem=len(Cart.objects.filter(user=request.user))
     product=Product.objects.filter(category=val)
-    # title=Product.objects.filter(category=val).values('id')
+    if val=='Mo':
+        name='MobilePhone'
+    elif val=='El':
+        name="Electronics"
+    elif  val=="Fa":
+        name="Fashion"
+    elif val=='Ap':
+        name="Appliances"
+    elif val=='Gr':
+        name="Groceries"
+    elif val=='Me':
+        name="Medicine"
+    else:
+        name="Others"
     return render(request,'app/category.html',locals())
 
 def productdetail(request,pk):
@@ -238,13 +253,15 @@ def remove_cart(request):
         return JsonResponse(data)
     
     
+client=razorpay.Client(auth=(RAZOR_API_KEY,RAZOR_API_SECRET_KEY))
 def checkout(request):
     totalitem=0
     if request.user.is_authenticated:
         totalitem=len(Cart.objects.filter(user=request.user))
     if request.method=='GET':
         user=request.user
-        add=Customer.objects.filter(user=user)
+        print(user)
+        customer=Customer.objects.filter(user=user)
         cart_item=Cart.objects.filter(user=user)
         famount=0
         for p in cart_item:
@@ -257,13 +274,28 @@ def checkout(request):
         else:
             totalamount=famount+100
         totalamount1=totalamount*100
-        razoramount=float(totalamount1)
-        client=razorpay.Client(auth=(settings.RAZOR_KEY_ID,settings.RAZOR_KEY_SECRET))
-        data={'amount': razoramount,'currency':'INR','receipt':'order_rcptid_12'}
-        payment_response=client.order.create(data=data)
-        print(payment_response)
-        order_id=payment_response['id']
-        order_status=payment_response['status']
+        order_amount=float(totalamount1)
+        api_key=RAZOR_API_KEY
+        # order_currency='INR'
+        # order_receipt='order_rcptid_12'
+        # payment_id=request.GET.get('payment_id')
+        
+        # notes={'Shipping address':customer}
+        # payment_order=client.order.create(dict(amount=order_amount,currency=order_currency,receipt=order_receipt,payment_capture=1))
+        
+        data={'amount': order_amount,'currency':'INR','receipt':'order_rcptid_12'}
+        payment_order=client.order.create(data=data)
+        print(payment_order)
+        
+        payment_order_id=payment_order['id']
+        order_id=payment_order_id
+        # print(order_id)
+        # order_status=payment_order['status']
+        # print(payment_order)
+        # payment=Payment(user=user,amount=order_amount,razorpay_order_id=order_id,razorpay_payment_status=order_status,)
+        # payment.save()
+        # print(payment)
+        order_status=payment_order['status']
         if order_status=='created':
             payment=Payment(
                 user=user,
@@ -272,14 +304,6 @@ def checkout(request):
             )
             payment.save()
         return render(request,'app/checkout.html',locals())
-
-    # elif request.method=='POST':
-    #     user=request.user
-    #     customer=Customer.objects.filter(user=user)
-    #     cart_item=Cart.objects.filter(user=user)
-    #     for c in cart_item:
-    #         OrderPlaced(user=user,customer=customer,product=c.product,quantity=c.quantity,payment="done").save()
-    #     c.delete()
 
 def payment_done(request):
     order_id=request.GET.get('order_id')

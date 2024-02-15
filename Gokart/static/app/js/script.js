@@ -110,7 +110,7 @@ $('.remove-cart').click(function(){
 // })
 
 function darkmode() {
-    var element = document.body;
+    const element = document.body;
     element.classList.toggle("dark-mode");
  }
 

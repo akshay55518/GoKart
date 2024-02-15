@@ -41,31 +41,17 @@
                             <span class="material-symbols-outlined">home</span>
                             Home</a>
                     </li>
-                    
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Products
                         </a>
-                        <!-- {% for i in category %}
-                        <a href="{% url 'category' i.id %}">
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li class="dropdown-item">{{i.title}}</li>
-                        </ul></a>
-                        {% endfor %} -->
-                        {% for i in category %}
-                       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for i in category %}
                             <li><a class="dropdown-item" href="{% url 'category' i.id %}">{{i.title}}</a></li>
-                            <li><a class="dropdown-item" href="{% url 'category' 'La'%}">laptops</a></li>
-                            <li><a class="dropdown-item" href="{% url 'category' 'El'%}">Electronics</a></li>
-                            <li><a class="dropdown-item" href="{% url 'category' 'Fa'%}">Fashion</a></li>
-                            <li><a class="dropdown-item" href="{% url 'category' 'Ap'%}">Appliances</a></li>
-                            <li><a class="dropdown-item" href="{% url 'category' 'Gr'%}">Grocery</a></li>
-                            <li><a class="dropdown-item" href="{% url 'category' 'Me'%}">Medicine</a></li>
+                            {% endfor %}
                         </ul>
-                        {% endfor %}
-                    </li>
-
                 </ul>
                 {% if request.user.is_authenticated %}
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -117,10 +103,9 @@
                     </form>
                     <ul>
                         <li class="navbar-nav ">
-                            <button class="btn text-light " onclick="darkmode()">
-                                <span class="material-symbols-outlined">
-                                dark_mode
-                                </span></button>
+                            <div class="checkbox-wrapper-17">
+                                <input type="checkbox" id="switch-17" onclick="darkmode()" /><label for="switch-17"></label>
+                              </div>
                         </li>
                     </ul>
                 </div>
