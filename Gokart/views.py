@@ -135,7 +135,7 @@ def profileview(request):
             reg=Customer(user=user,name=name,address=address,mobile=mobile,city=city,state=state,zipcode=zipcode)
             reg.save()
             messages.success(request,'Data saved successfully')
-            return redirect(profileview)
+            return redirect('address')
         else:
             messages.warning(request,"Please correct the error ")
             return redirect(profileview)
@@ -181,12 +181,9 @@ def updateaddress(request,pk):
         return render(request,'app/address-update.html',locals())
     
 def deleteaddress(request,pk):
-    if request.method=='POST':
-        form=CustomerProfileForm(request.POST)
-        if form.is_valid():
-            obj=Customer.objects.get(pk=pk)
-            obj.delete()
-            messages.warning(request,"Address deleted Successfully")
+    obj=Customer.objects.get(pk=pk)
+    obj.delete()
+    messages.warning(request,"Address deleted Successfully")
     return redirect('address')
     
 #cart section
@@ -222,6 +219,11 @@ def show_cart(request):
     else:
         totalamount=amount+40
     return render(request,'app/add-tocart.html',locals())
+
+# def remove_from_cart(request, cart_item_id):
+#     cart_item = get_object_or_404(Cart, id=cart_item_id)
+#     cart_item.delete()
+#     return redirect('show_cart')
 
 
 def plus_cart(request):
@@ -321,7 +323,6 @@ def checkout(request):
         # order_currency='INR'
         # order_receipt='order_rcptid_12'
         # payment_id=request.GET.get('payment_id')
-        
         # notes={'Shipping address':customer}
         # payment_order=client.order.create(dict(amount=order_amount,currency=order_currency,receipt=order_receipt,payment_capture=1))
         

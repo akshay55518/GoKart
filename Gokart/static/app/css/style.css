@@ -3,15 +3,17 @@ body{
     color: black;
 }
 .dark-mode {
-    background-color: rgba(0, 0, 0, 0.808);
+    background-color: black;
     color: white;
     transition: all ease-in 1s;
   }
-
+  .dark-mode .card{
+    background-color: rgba(0, 0, 0, 0.432);
+    border: white;
+    }
 .dark-mode a{
-    color: black;
+    color: rgb(255, 253, 253);
 }
-
   .checkbox-wrapper-17 input[type=checkbox] {
     height: 0;
     width: 0;

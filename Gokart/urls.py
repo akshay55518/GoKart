@@ -31,6 +31,7 @@ urlpatterns = [
     path('pluscart/',views.plus_cart),
     path('minuscart/',views.minus_cart),
     path('removecart/',views.remove_cart,name='remove-cart'),
+    # path('cart/remove/<int:cart_item_id>/', views.remove_from_cart, name='remove_from_cart'),
     
     #Admin section
     path('admin-dashboard',views.admin_dashboard,name='admin-dashboard'),
