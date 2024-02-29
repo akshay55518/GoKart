@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between ">
                     <h5>{{item.product.title}}</h5>
-                    <a class="remove-cart btn " pid="{{item.product.id}}" >
+                    <a class="btn " href="{% url 'remove_from_cart' item.id %}" >
                         <span class="material-symbols-outlined" style="font-size: 24px;">
                         delete
                         </span>

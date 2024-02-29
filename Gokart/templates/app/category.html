@@ -18,7 +18,9 @@
                     <p class="card-text">Discount Price:{{prod.discount_price}}</p>
                   </div>
                   <div class="d-flex justify-content-between card-footer">
-                    <a href="" class="btn"><span class="material-symbols-outlined">favorite</span></a>
+                    <a href="{% url 'add_to_wishlist' prod.id %}" class="btn">
+                      <span class="material-symbols-outlined">
+                        favorite</span></a>
                         <a href="{% url 'add-to-cart' %}" class="btn btn-primary">
                           <span class="material-symbols-outlined">
                           shopping_cart

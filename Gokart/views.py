@@ -220,10 +220,10 @@ def show_cart(request):
         totalamount=amount+40
     return render(request,'app/add-tocart.html',locals())
 
-# def remove_from_cart(request, cart_item_id):
-#     cart_item = get_object_or_404(Cart, id=cart_item_id)
-#     cart_item.delete()
-#     return redirect('show_cart')
+def remove_from_cart(request,cart_item_id):
+    cart_item = get_object_or_404(Cart, id=cart_item_id, user=request.user)
+    cart_item.delete()
+    return redirect(show_cart)
 
 
 def plus_cart(request):
@@ -272,26 +272,26 @@ def minus_cart(request):
         }
         return JsonResponse(data)
 
-def remove_cart(request):
-    if request.method=='GET':
-        prod_id=request.GET['prod_id']
-        c=Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
-        c.delete()
-        user=request.user
-        cart=Cart.objects.filter(user=user)
-        amount=0
-        for p in cart:
-            value=p.quantity*p.product.discount_price
-            amount=amount+value
-        if amount>1000:
-            totalamount=amount
-        else:
-            totalamount=amount+100
-        data={
-            'amount':amount,
-            'totalamount':totalamount
-        }
-        return JsonResponse(data)
+# def remove_cart(request):
+#     if request.method=='GET':
+#         prod_id=request.GET['prod_id']
+#         c=Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
+#         c.delete()
+#         user=request.user
+#         cart=Cart.objects.filter(user=user)
+#         amount=0
+#         for p in cart:
+#             value=p.quantity*p.product.discount_price
+#             amount=amount+value
+#         if amount>1000:
+#             totalamount=amount
+#         else:
+#             totalamount=amount+100
+#         data={
+#             'amount':amount,
+#             'totalamount':totalamount
+#         }
+#         return JsonResponse(data)
     
     
 client=razorpay.Client(auth=(RAZOR_API_KEY,RAZOR_API_SECRET_KEY))
@@ -371,6 +371,7 @@ def wishlist(request):
     totalitem1=0
     if request.user.is_authenticated:
         totalitem1=len(WishListItem.objects.filter(user=request.user))
+    product=Product.objects.all()
     wishlist_items=WishListItem.objects.filter(user=request.user)
     return render(request,'app/wishlist.html',locals())
 
@@ -405,5 +406,6 @@ def search_results(request):
 #admin section
 # @login_required
 def admin_dashboard(request):
-    return render(request,'admin/admin-dashboard.html',locals())
+    if request.user=='admin':
+        return render(request,'admin/admin-dashboard.html',locals())
     

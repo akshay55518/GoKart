@@ -31,19 +31,20 @@
                                         <p class="mb-0"><strong>Rs{{item.product.discount_price}}</strong></p>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-end ">
-                                    <!-- {% for cart_item in cart_item %}
-                                    <form action="{% url 'remove_from_cart' cart_item.id %}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit">Remove</button>
-                                    </form>
-                                    {% endfor %} -->
-                                    <a class="remove-cart btn btn-sm btn-danger mr-3" pid="{{item.product.id}}">
+                                <!-- <div class="d-flex justify-content-end "> -->
+                                    <!-- <a class="remove-cart btn btn-sm btn-danger mr-3" pid="{{item.product.id}}">
                                         <span class="material-symbols-outlined" style="font-size: 18px;">
                                         delete
                                         </span>Remove item </a>
                                     
-                                </div>
+                                </div> -->
+                                <div class="d-flex justify-content-end ">
+                                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger w-25 ">
+                                        <span class="material-symbols-outlined" style="font-size: 18px;">
+                                            delete
+                                         </span>Remove
+                                    </a>
+                               </div> 
                             </div>
                         </div>
                     </div>
