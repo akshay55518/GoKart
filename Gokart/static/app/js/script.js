@@ -82,3 +82,34 @@ function darkmode() {
     const element = document.body;
     element.classList.toggle("dark-mode");
  }
+
+ $(document).ready(function() {
+    $("#wishlist-form").submit(function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var productId = $(this).data("product-id");
+        var formData = $(this).serialize(); // Serialize form data
+
+        $.ajax({
+            url: "{% url 'add_to_wishlist' %}",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function(data) {
+                // Handle success response
+                console.log(data);
+                // Update button icon based on response
+                var button = $("#wishlist-form button");
+                if (data.success) {
+                    button.html('<span class="material-symbols-outlined">favorite</span>');
+                } else {
+                    button.html('<span class="material-symbols-outlined">heart_broken</span>');
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle error response
+                console.error("Error:", error);
+            }
+        });
+    });
+});

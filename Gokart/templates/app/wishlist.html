@@ -9,11 +9,13 @@
     <div class="row gap-3 ">
         {% if wishlist_items %}
         {% for item in wishlist_items %}
-        <!-- {% for product in product %} -->
+        
 
         <div class="card p-4 ">
-            <!-- <a href="{% url 'product-detail' product.id %}" class="btn "> -->
-                <div class=" d-flex justify-content-between  ">
+            
+                
+                    <a href="{% url 'product-detail' item.product.id %}" class="text-decoration-none text-black ">
+                        <div class=" d-flex justify-content-between ">
                     <img src="{{ item.product.product_image.url }}" alt="{{ item.product.title }}" width="100px" height="100px">
                     <div>
                         <p class="fw-bold ">{{ item.product.title }}</p>
@@ -23,15 +25,16 @@
                         <span class="material-symbols-outlined">
                             currency_rupee
                             </span>{{item.product.discount_price}}</p>
-                </div>
-            <!-- </a> -->
+                        </div>
+                        </a>
+                
           
 
            <div class="d-flex justify-content-center align-items-center ">
                 <a href="{% url 'remove_from_wishlist' item.id %}" class="btn btn-danger w-25 ">Remove</a>
            </div> 
         </div>
-        <!-- {% endfor %} -->
+
         {% endfor %}
         {% else %}
         <p>Your wishlist is empty.</p>

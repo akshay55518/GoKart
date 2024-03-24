@@ -14,6 +14,8 @@ urlpatterns = [
     #category, profile 
     path('category/<slug:val>',views.category,name='category'),
     path('product-detail/<int:pk>',views.productdetail,name='product-detail'),
+    path('product/<int:pk>/add_review/', views.add_review, name='add_review'),
+    path('review/<int:pk>/delete/', views.delete_review, name='delete_review'),
     path('profile/',views.profileview,name='profile'),
     path('address/',views.address,name='address'),
     path('address-update/<int:pk>',views.updateaddress,name='address-update'),
@@ -23,9 +25,11 @@ urlpatterns = [
     path('cart/',views.show_cart,name='show-cart'),
     path('add-to-cart/',views.add_to_card,name='add-to-cart'),
     path('checkout/',views.checkout,name='checkout'),
-    path('orders/',views.home,name='orders'),
+    path('orderplaced/', views.orderplaced, name='orderplaced'),
+    path('order_success/', views.order_success, name='order_success'),
+    path('orders/',views.orders,name='orders'),
     #payment
-    path('paymentdone/',views.payment_done,name='payment-done'),
+    # path('paymentdone/',views.payment_done,name='paymentdone'),
     
     #cart button action
     path('pluscart/',views.plus_cart),

@@ -16,6 +16,9 @@
         <div class="col-sm-6 ">
             <h4 class="fw-bold ">Order Summary</h4>
             <hr>
+            {% for msg in messages %}
+                <div class="alert alert-{{msg.tags}}" role="alert">{{msg}}</div>
+            {% endfor %}
             {% for item in cart_item %}
             <div class="card gap-3 " >
                 <div class="card-body">
@@ -43,22 +46,20 @@
         </div>
         <div class="col-sm-4 offset-sm-1 ">
             <h4 class="fw-bold ">Select Shipping Address:</h4>
-            <!-- <p>{{api_key}}</p> -->
-            <!-- <P>{{order_amount}}</P> -->
             <hr>
-            <form method="post" id="myform" class="gap-3 ">
+            <form method="post" id="myform" action="{% url 'orderplaced' %}" class="gap-3 ">
                 {% csrf_token %}
                 {% for ad in customer %}
                 
-                <div class="card gap-3">
-                    <div class="card-header-tabs">
-                        <div class="form-check mt-2 mb-5">
+                <div>
+                    <div>
+                        <div class="form-check">
                             <label class="form-check-label fw-bold  " for="custadd{{forloop.counter}}">Address:{{forloop.counter}} </label>
-                            <input type="radio" class="form-check-input" name="cust_id" id="custadd{{forloop.counter}}" value="{{ad.id}}">
+                            <input type="radio" class="form-check-input" name="custid" id="custadd{{forloop.counter}}" value="{{ad.id}}">
                         </div>
                     </div>
-                    <div class="card-body shadow ">
-                        <h5 class="text-decoration-underline ">{{ad.name}}</h5>
+                    <div class="card shadow p-2  ">
+                        <h5 class="text-decoration-underline text-capitalize">{{ad.name}}</h5>
                         <p>Mobile: {{ad.mobile}}</p>
                         <p>Address: {{ad.address}}, <br> {{ad.city}},<br> {{ad.state}} <br>{{ad.zipcode}}</p>
                     </div>
@@ -69,10 +70,8 @@
                     <p class="fw-bold text-center ">Total Amount:</p>
                     <input type="number" class="form-control " name="totalamount" value="{{totalamount}}" disabled>
                 </div>
-                <div class="d-flex justify-content-center  ">
-                    <!-- <p>{{order_id}}</p> -->
-                    <!-- <button type="submit" class="btn btn-primary mt-3 px-5 ">Continue</button> -->
-                    <button id="rzp-button1" type="submit" class="btn btn-primary btn-outline-success   mt-1 px-4 text-white  ">Payment</button>
+                <div class="d-flex justify-content-center gap-3  ">
+                    <button type="submit" class="btn btn-primary mt-1 px-4">Payment <span class="">(Normal)</span></button>
                 </div>
             </form>
         </div>
@@ -83,7 +82,7 @@
 
 {% block payment-gateway %}
 
-<script>
+<!-- <script>
     var options = {
     "key": "{{api_key}}",
     "name": "GoKart",
@@ -95,7 +94,17 @@
         // alert(response.razorpay_payment_id);
         // alert(response.razorpay_order_id);
         // alert(response.razorpay_signature)
-        window.location.href='http://localhost:8000/paymentdone?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&cust_id=${form.elements["cust_id"].value}'
+        var orderId = response.razorpay_order_id;
+        var paymentId = response.razorpay_payment_id;
+        var custId = form.elements["cust_id"].value;
+
+        var url = "http://localhost:8000/paymentdone/?" + 
+                "order_id=" + encodeURIComponent(orderId) + 
+                "&payment_id=" + encodeURIComponent(paymentId) + 
+                "&cust_id=" + encodeURIComponent(custId);
+            window.location.href = url;
+
+        // window.location.href='http://localhost:8000/paymentdone?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&cust_id=${form.elements["cust_id"].value}'
     },
     "theme": {
         "color": "#3399cc"
@@ -110,6 +119,6 @@ document.getElementById('rzp-button1').onclick=function(e){
     rzp1.open();
     e.preventDefault();
 }
-</script>
+</script> -->
 
 {% endblock payment-gateway %}

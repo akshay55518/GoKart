@@ -5,14 +5,15 @@
 
 {% block main-content %}
 
-<div class="container my-5 p-3">
+<div class="container my-5 p-3 gap-4 ">
 
     <div class="card p-5">
         <div class="row">
             <aside class="col-md-6">
                 <div class="gallery-wrap">
                     <div class="img-big-wrap">
-                        <a href="#"><img src="{{product.product_image.url}}" class="object-fit-contain " width="400" height="400"></a>
+                        <a href="#"><img src="{{product.product_image.url}}" class="object-fit-contain " width="400"
+                                height="400"></a>
                     </div>
                 </div>
             </aside>
@@ -21,12 +22,16 @@
                     <div class="d-flex justify-content-between ">
                         <h2 class="title">{{product.title}}</h2>
                         <a href="{% url 'add_to_wishlist' product.id %}" class="text-decoration-none ">
-                            <span class="material-symbols-outlined">
-                                favorite
-                            </span></a>
+                            <button class="btn">
+                                {% if wishlist %}
+                                <span class="material-symbols-outlined">favorite</span>
+                                {% else %}
+                                <span class="material-symbols-outlined">heart_broken</span>
+                                {% endif %}
+                            </button>
                     </div>
 
-                    <div class="mb-3 d-flex justify-content-between" >
+                    <div class="mb-3 d-flex justify-content-between">
                         <small class="h6 text-decoration-line-through text-danger ">
                             <span class="material-symbols-outlined">currency_rupee</span>
                             {{product.selling_price}}</small>
@@ -47,10 +52,10 @@
                     <!-- button -->
                     <div class="d-flex justify-content-between ">
                         <form action="/add-to-cart" method="">
-                        <input type="hidden" name="prod_id" value="{{product.id}}">
-                        <button class="btn btn-primary">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>Add to cart</span>
-                        </button>
+                            <input type="hidden" name="prod_id" value="{{product.id}}">
+                            <button class="btn btn-primary">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>Add to cart</span>
+                            </button>
                         </form>
                         <a href="{% url 'show-cart' %}" class="btn btn-dark">
                             <i class="fa fa-shopping-bag" aria-hidden="true"></i>
@@ -61,6 +66,80 @@
             </main>
         </div>
     </div>
-</div>
 
-{% endblock main-content %}
+    <div class="card mt-4 ">
+        <div class="card-header">
+            <h5><span class="material-symbols-outlined">
+                    reviews
+                </span> Review</h5>
+        </div>
+        <div class="card-body d-flex gap-5">
+            <div>
+                <form action="{% url 'add_review' product.id %}" method="post">
+                    {% csrf_token %}
+                    <label for="rating">Rating:</label>
+                    <select name="rating" id="rating" class="form-select">
+                        <option selected>Open this select menu</option>
+                        <option value="1">1 Star</option>
+                        <option value="2">2 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="5">5 Stars</option>
+                    </select><br><br>
+                    <!-- <label for="comment">Comment:</label><br> -->
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" name="comment" id="comment"
+                            rows="4" cols="50"></textarea>
+                        <label for="floatingTextarea">Comments</label>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4 ">
+                        <button type="submit" class="btn btn-success ">Submit</button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <h5 class="text-decoration-underline ">Rating:</h5>
+                <strong><span class="material-symbols-outlined">
+                        star
+                    </span>{{ average_rating|default:"No reviews yet" }}</strong>
+                {% if reviews %}
+                {% for review in reviews|slice:":3" %}
+                <div class="shadow mt-2 p-2 d-flex justify-content-between w-100">
+                    <div class="d-flex justify-content-between gap-5 ">
+                        <p class="text-capitalize ">
+                            <span class="material-symbols-outlined">
+                                person
+                            </span>{{ review.user.username }}
+                        </p>
+                        <p><span class="material-symbols-outlined">
+                                star
+                            </span> {{ review.rating }}</p>
+                        <p><span class="material-symbols-outlined">
+                                comment
+                            </span> {{ review.comment }}</p>
+
+                    </div>
+                    <div>
+                        <form action="{% url 'delete_review' review.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="btn" type="submit"><span class="material-symbols-outlined"
+                                    style="font-size: 24px;">
+                                    delete
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+                {% empty %}
+                <p></p>
+                {% endfor %}
+                {% else %}
+                <p class="text-center ">No reviews available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% endblock main-content %}

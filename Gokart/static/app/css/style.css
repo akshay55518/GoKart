@@ -58,12 +58,15 @@ body{
   }
 
   img {
-    /* width: 100%; */
     transition: 0.5s all ease-in-out;
 }
 
-img:hover {
-    transform: scale(1.1);
-    /* pointer-events: visibleStroke; */
+  img:hover {
+    filter: brightness(50%) blur(1px);
     cursor: grab;
+}
+.form1{
+  border-radius: 8px;
+  padding: 8px;
+  border: none  ;
 }

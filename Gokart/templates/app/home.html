@@ -32,14 +32,13 @@
 <link rel="stylesheet" href="{% static 'app/css/home.css'%}">
 
 <div class="container container1 card p-3 gap-3   ">
-    
     <h3>View Items</h3>
     <div class="row gap-3 d-flex justify-content-center ">
         {% for product in product %}
     <div class="card shadow object-fit-contain " style="width: 18rem;">
         <div class="d-flex justify-content-between">
             <div>
-                <a href="{% url 'product-detail' product.id %}" class="btn ">
+                <a  href="{% url 'product-detail' product.id %}" class="btn ">
                     <span class="material-symbols-outlined">
                         visibility
                     </span>
@@ -49,16 +48,30 @@
                 <form action="{% url 'add_to_wishlist' product.id %}" method="post">
                     {% csrf_token %}
                     <button class="btn">
-                        <span class="material-symbols-outlined">
-                        favorite
-                        </span>
+                        <span class="material-symbols-outlined">favorite</span>
                     </button>
                 </form>
+                <!-- <form id="wishlist-form" data-product-id="{{ product.id }}">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    {% csrf_token %}
+                    <button type="button" class="btn">
+                        {% if wishlist %}
+                        <span class="material-symbols-outlined">favorite</span>
+                        {% else %}
+                        <span class="material-symbols-outlined">heart_broken</span>
+                        {% endif %}
+                    </button>
+                </form> -->
+                
             </div>
         </div>
 
         <a href="{% url 'product-detail' product.id %}" class="text-decoration-none text-bg-dark ">
-            <img src="{{product.product_image.url}}" class="card-img" alt="{{product.title}}" width="auto" height="250px">
+            <div class="container1">
+                <img src="{{product.product_image.url}}" class="card-img" alt="{{product.title}}" width="auto" height="250px">
+                <!-- <h2 class="center1">{{product.title}}</h2> -->
+            </div>
+           
             <div class="card-body">
               <h5 class="card-title">{{product.title}}</h5>
               <div>

@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
+from django.contrib.auth.views import PasswordResetDoneView
 from .models import Product,Category,Banner,Customer,WishListItem
 from django.views import View
 from django.contrib import messages
@@ -12,6 +13,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
 from django.http import JsonResponse
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 from Ecommerce.settings import RAZOR_API_KEY,RAZOR_API_SECRET_KEY
 import razorpay
 
@@ -36,6 +38,8 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+
+
 def get_password_reset_url(request):
     # email=MyPasswordResetForm()
     base64_encoded_id = utils.http.urlsafe_base64_encode(utils.encoding.force_bytes(request.id))
@@ -59,7 +63,6 @@ def home(request):
     banner=Banner.objects.all()
     category=Category.objects.all()
     product=Product.objects.all()
-    # id=Product.objects.filter().values('id')
     obj={'category':category,'product':product,'banner':banner,'id':id}
     return render(request,'app/home.html',locals())
 
@@ -105,6 +108,8 @@ def category(request,val):
         name="Others"
     return render(request,'app/category.html',locals())
 
+from django.db.models import Avg
+
 def productdetail(request,pk):
     totalitem=0
     if request.user.is_authenticated:
@@ -113,8 +118,33 @@ def productdetail(request,pk):
     if request.user.is_authenticated:
         totalitem1=len(WishListItem.objects.filter(user=request.user))
     product=Product.objects.get(pk=pk)
+    review=Review.objects.filter(product=pk)
+    reviews = product.reviews.order_by('-created_at')[:5] # get the top 5 reviews for this product
+    average_rating = review.aggregate(Avg('rating'))['rating__avg']
     return render(request,'app/product-detail.html',locals())
 
+
+def add_review(request,pk):
+    if request.method == 'POST':
+        rating = request.POST['rating']
+        comment = request.POST['comment']
+        user = request.user
+        product= Product.objects.get(id=pk)
+        review=Review.objects.create(
+            product=product, 
+            user=user, 
+            rating=rating, 
+            comment=comment
+            )
+        return render(request, 'app/product-detail.html',locals())
+    
+def delete_review(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    if request.user == review.user:
+        review.delete()
+        return redirect('productdetail', pk=pk)  # Redirect to the product detail page
+
+@login_required(login_url='login')
 def profileview(request):
     totalitem=0
     if request.user.is_authenticated:
@@ -142,7 +172,8 @@ def profileview(request):
     else:
         form=CustomerProfileForm()
         return render(request,"app/profile-view.html", locals())
-    
+
+@login_required(login_url='login')
 def address(request):
     totalitem=0
     if request.user.is_authenticated:
@@ -153,6 +184,7 @@ def address(request):
     add=Customer.objects.filter(user=request.user)
     return render(request,'app/address.html',locals()) 
 
+@login_required(login_url='login')
 def updateaddress(request,pk):
     totalitem=0
     if request.user.is_authenticated:
@@ -180,6 +212,7 @@ def updateaddress(request,pk):
         form=CustomerProfileForm(instance=add)
         return render(request,'app/address-update.html',locals())
     
+@login_required(login_url='login')
 def deleteaddress(request,pk):
     obj=Customer.objects.get(pk=pk)
     obj.delete()
@@ -187,6 +220,7 @@ def deleteaddress(request,pk):
     return redirect('address')
     
 #cart section
+@login_required(login_url='login')
 def add_to_card(request):
     totalitem=0
     if request.user.is_authenticated:
@@ -200,7 +234,7 @@ def add_to_card(request):
     Cart(user=user,product=product).save()
     return redirect('/cart')
     
-
+@login_required(login_url='login')
 def show_cart(request):
     totalitem=0
     if request.user.is_authenticated:
@@ -292,9 +326,10 @@ def minus_cart(request):
 #             'totalamount':totalamount
 #         }
 #         return JsonResponse(data)
+
     
-    
-client=razorpay.Client(auth=(RAZOR_API_KEY,RAZOR_API_SECRET_KEY))
+
+
 def checkout(request):
     totalitem=0
     if request.user.is_authenticated:
@@ -304,9 +339,11 @@ def checkout(request):
         totalitem1=len(WishListItem.objects.filter(user=request.user))
     if request.method=='GET':
         user=request.user
-        print(user)
+        # print(user)
         customer=Customer.objects.filter(user=user)
+        # print(customer)
         cart_item=Cart.objects.filter(user=user)
+        # print(cart_item)
         famount=0
         for p in cart_item:
             value=p.quantity*p.product.discount_price
@@ -319,50 +356,54 @@ def checkout(request):
             totalamount=famount+100
         totalamount1=totalamount*100
         order_amount=float(totalamount1)
-        api_key=RAZOR_API_KEY
-        # order_currency='INR'
-        # order_receipt='order_rcptid_12'
-        # payment_id=request.GET.get('payment_id')
-        # notes={'Shipping address':customer}
-        # payment_order=client.order.create(dict(amount=order_amount,currency=order_currency,receipt=order_receipt,payment_capture=1))
-        
-        data={'amount': order_amount,'currency':'INR','receipt':'order_rcptid_12'}
-        payment_order=client.order.create(data=data)
-        print(payment_order)
-        
-        payment_order_id=payment_order['id']
-        order_id=payment_order_id
-        # print(order_id)
-        # order_status=payment_order['status']
-        # print(payment_order)
-        # payment=Payment(user=user,amount=order_amount,razorpay_order_id=order_id,razorpay_payment_status=order_status,)
-        # payment.save()
-        # print(payment)
-        order_status=payment_order['status']
-        if order_status=='created':
-            payment=Payment(
-                user=user,
-                razorpay_order_id=order_id,
-                razorpay_payment_status=order_status,
-            )
-            payment.save()
+        # print(order_amount)
+        # print(p.quantity)
         return render(request,'app/checkout.html',locals())
 
-def payment_done(request):
-    order_id=request.GET.get('order_id')
-    payment_id=request.GET.get('payment_id')
-    cust_id=request.GET.get('cust_id')
+def orderplaced(request):
+    if request.method == 'POST':
+        user=request.user
+        cust_id = request.POST.get('custid')
+        total_amount = request.POST.get('totalamount')
+        cart_item=Cart.objects.filter(user=user).first()
+        cart_items=Cart.objects.filter(user=user)
+        for p in cart_items:
+            quantity=p.quantity
+            product=p.product
+        order = OrderPlaced.objects.create(
+            user=user,
+            customer_id=cust_id,
+            product=product,  
+            quantity=quantity,  
+            status='Pending',   
+        )
+        cart_item.delete()
+        messages.success(request, 'Order placed successfully!')
+        return redirect('order_success')
+    else:
+        messages.error(request, 'No items found in the cart.')
+        return redirect('checkout')
+    
+def order_success(request):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
+    totalitem1=0
+    if request.user.is_authenticated:
+        totalitem1=len(WishListItem.objects.filter(user=request.user))
+    return render(request, 'app/order_placed.html',locals())
+
+           
+def orders(request):
+    totalitem=0
+    if request.user.is_authenticated:
+        totalitem=len(Cart.objects.filter(user=request.user))
+    totalitem1=0
+    if request.user.is_authenticated:
+        totalitem1=len(WishListItem.objects.filter(user=request.user))
     user=request.user
-    customer=Customer.objects.get(id=cust_id)
-    payment=Payment.objects.get(razorpay_order_id=order_id)
-    payment.paid=True
-    payment.razorpay_payment_id=payment_id
-    payment.save()
-    cart=Cart.objects.filter(user=user)
-    for c in cart:
-        OrderPlaced(user=user,customer=customer,product=c.product,quantity=c.quantity,payment=payment).save()
-        c.delete()
-    return redirect('orders')
+    order=OrderPlaced.objects.filter(user=user)
+    return render(request, "app/orders.html", locals())
 
 def wishlist(request):
     totalitem=0
@@ -381,6 +422,24 @@ def add_to_wishlist(request, product_id):
     if created:
         pass
     return redirect('wishlist')
+# from django.views.decorators.csrf import csrf_exempt
+
+# @csrf_exempt  # This decorator is used to exempt CSRF protection for this view
+# def add_to_wishlist(request):
+#     if request.method == 'POST':
+#         product_id = request.POST.get('product_id')  # Assuming 'product_id' is sent in the request data
+#         product = get_object_or_404(Product, id=product_id)
+#         # Check if the product is already in the wishlist
+#         if Wishlist.objects.filter(product=product, user=request.user).exists():
+#             # If already in the wishlist, remove it
+#             Wishlist.objects.filter(product=product, user=request.user).delete()
+#             return JsonResponse({'success': False})
+#         else:
+#             # If not in the wishlist, add it
+#             Wishlist.objects.create(product=product, user=request.user)
+#             return JsonResponse({'success': True})
+#     else:
+#         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def remove_from_wishlist(request, wishlist_item_id):
     wishlist_item = get_object_or_404(WishListItem, id=wishlist_item_id, user=request.user)
@@ -396,7 +455,10 @@ def search_results(request):
         totalitem1=len(WishListItem.objects.filter(user=request.user))
     query=request.GET.get('search')
     if query:
-        results=Product.objects.filter(title__icontains=query)
+        results=Product.objects.filter(
+            models.Q(title__icontains=query) |
+            models.Q(selling_price__icontains=query)
+            )
     else:
         results=None
     return render(request,'app/search_results.html',locals())
@@ -406,6 +468,9 @@ def search_results(request):
 #admin section
 # @login_required
 def admin_dashboard(request):
-    if request.user=='admin':
+    user=request.user
+    if user.is_superadmin==1:
+        users=User.objects.all()
+        orders=OrderPlaced.objects.all()
         return render(request,'admin/admin-dashboard.html',locals())
     
