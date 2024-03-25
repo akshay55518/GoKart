@@ -91,10 +91,8 @@
 <h3>Categories</h3>
 <div class="row d-flex justify-content-center gap-3 ">
     {% for category in category %}
-    <!-- <p>{{category.title}}</p> -->
     <div class="col-md-4 col-sm-4 mt-4  fadeInUp w-25 shadow" >
         <div class="card object-fit-fill">
-            <!-- <p>{{category.id}}</p> -->
             <a href="{% url 'category' category.id %}" class="text-decoration-none">
                 <div class="text-center">
                     <img class="card-img" src="{{category.category_image.url}}" alt="{{category.title}}" width="50" height="100">

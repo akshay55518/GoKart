@@ -473,9 +473,110 @@ def search_results(request):
 
     
 #admin section
-# @login_required
+@login_required
 def admin_dashboard(request):
     users=User.objects.all()
     orders=OrderPlaced.objects.all()
     return render(request,'admin/admin-dashboard.html',locals())
     
+def add_banner(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        banner_image = request.FILES.get('banner_image')
+        banner = Banner(title=title, banner_image=banner_image)
+        banner.save()
+        return redirect('add_banner') 
+    else:
+        banner=Banner.objects.all()
+        return render(request, 'admin/add_banner.html',locals())
+    
+def delete_banner(request, banner_id):
+    banner= get_object_or_404(Banner, id=banner_id)
+    if request.method == 'POST':
+        banner.delete()
+    return redirect('add_banner') 
+    
+def add_category(request):
+    if request.method == 'POST':
+        id=request.POST.get('id')
+        title = request.POST.get('title')
+        category_image = request.FILES.get('category_image')
+        category = Category(id=id,title=title, category_image=category_image)
+        category.save()
+        return redirect('add_category')  
+    else:
+        category=Category.objects.all()
+        return render(request, 'admin/add_category.html',locals())
+    
+def delete_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    if request.method == 'POST':
+        category.delete()
+    return redirect('add_category')  
+    
+def add_brand(request):
+    if request.method == 'POST':
+        id=request.POST.get('id')
+        brand_name=request.POST.get('brand_name')
+        brand_logo=request.FILES.get('brand_logo')
+        brand=Brand(id=id,brand_name=brand_name, brand_logo=brand_logo)
+        brand.save()
+        return redirect('add_brand')  
+    else:
+        brand=Brand.objects.all()
+        return render(request, 'admin/add_brand.html',locals())
+
+def delete_brand(request, brand_id):
+    brand= get_object_or_404(Brand, id=brand_id)
+    if request.method == 'POST':
+        brand.delete()
+    return redirect('add_brand') 
+
+def add_product(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        selling_price = request.POST.get('selling_price')
+        discount_price = request.POST.get('discount_price')
+        description = request.POST.get('description')
+        composition = request.POST.get('composition')
+        category_id = request.POST.get('category')
+        brand_id = request.POST.get('brand')
+        quantity = request.POST.get('quantity')
+        product_image = request.FILES.get('product_image')
+        product = Product(
+            title=title,
+            selling_price=selling_price,
+            discount_price=discount_price,
+            description=description,
+            composition=composition,
+            category_id=category_id,
+            brand_id=brand_id,
+            quantity=quantity,
+            product_image=product_image
+        )
+        product.save()
+        return redirect('add_product')  
+    else:
+        brand=Brand.objects.all()
+        category=Category.objects.all()
+        product=Product.objects.all()
+        return render(request, 'admin/add_product.html',locals())
+    
+def delete_product(request, product_id):
+    product= get_object_or_404(Product, id=product_id)
+    if request.method == 'POST':
+        product.delete()
+    return redirect('add_product')
+
+def order_status(request):
+    order=OrderPlaced.objects.all()
+    return render(request,'admin/order_status.html', locals())
+
+def update_order_status(request, order_id):
+    order = get_object_or_404(OrderPlaced, id=order_id)
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        order.status = status
+        order.save()
+        return redirect(order_status)  
+    return render(request, 'admin_order_detail.html', locals())

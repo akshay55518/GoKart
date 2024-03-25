@@ -7,18 +7,18 @@
 
 <div class="container">
     <h1 class="text-center text-capitalize  ">{{request.user}} dashboard</h1>
-    <div class="users ">
-        {% for i in users %}
-        <p>{{i.username}}</p>
-        {% endfor %}
+    <div class="d-flex ">
+        <div class="col-sm-2">
+            <button class="btn btn-secondary  mt-3 w-75 "><a href="{% url 'add_banner' %}" class="text-decoration-none text-white ">Banner</a></button> <br>
+            <button class="btn btn-secondary  mt-3 w-75"><a href="{% url 'add_category' %}" class="text-decoration-none text-white ">Category</a></button>
+            <button class="btn btn-secondary  mt-3 w-75"><a href="{% url 'add_brand' %}" class="text-decoration-none text-white ">Brand</a></button>
+            <button class="btn btn-secondary  mt-3 w-75"><a href="{% url 'add_product' %}" class="text-decoration-none text-white ">Products</a></button>
+        </div>
+        <div class="col-sm-12">
+            {% block admin-section  %}{% endblock admin-section %}
+        </div>
     </div>
-    <div class="orders">
-        {% for i in orders %}
-        <p>{{i.product}}</p>
-        <span>{{i.status}}</span>
-        <img src="{{i.product.product_image.url}}" alt="">
-        {% endfor %}
-    </div>
+   
     
 </div>
 

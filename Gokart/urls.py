@@ -7,7 +7,7 @@ from django.contrib.auth import views as auth_view
 from .forms import MyPasswordChangeForm,MySetPasswordForm,MyPasswordResetForm
 
 urlpatterns = [
-    #home section
+    # home section
     path('', views.home),
     path('about-us',views.aboutus,name='about-us'),
     path('contact-us',views.contactus,name='contact-us'),
@@ -59,7 +59,17 @@ urlpatterns = [
 
     #Admin section
     path('admin-dashboard',views.admin_dashboard,name='admin-dashboard'),
-    
+    path('add_banner/',views.add_banner, name='add_banner'),
+    path('delete_banner/<str:banner_id>/', views.delete_banner, name='delete_banner'),
+    path('add_category/',views.add_category, name='add_category'),
+    path('delete_category/<str:category_id>/', views.delete_category, name='delete_category'),
+    path('add_brand/', views.add_brand, name='add_brand'),
+    path('delete_brand/<str:brand_id>/', views.delete_brand, name='delete_brand'),
+    path('add_product/', views.add_product, name='add_product'),
+    path('delete_product/<str:product_id>/', views.delete_product, name='delete_product'),
+    path('order-status',views.order_status,name='order-status'),
+    path('order-status/<int:order_id>/update/', views.update_order_status, name='update_order_status'),
+
     
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

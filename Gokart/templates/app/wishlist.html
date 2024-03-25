@@ -5,7 +5,7 @@
 {% block main-content %}
 
 <div class="container">
-    <h1>My Wishlist</h1>
+    <h1 class="text-center ">My Wishlist</h1>
     <div class="row gap-3 ">
         {% if wishlist_items %}
         {% for item in wishlist_items %}
@@ -37,7 +37,7 @@
 
         {% endfor %}
         {% else %}
-        <p>Your wishlist is empty.</p>
+        <p class="text-center ">Your wishlist is empty.</p>
         {% endif %}
         
     </div>

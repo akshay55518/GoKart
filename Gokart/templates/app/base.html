@@ -69,7 +69,7 @@
                             <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                                 {% if request.user.is_superuser %}
                                 <li><a class="dropdown-item" href="{% url 'admin-dashboard' %}">Home</a></li>
-                                <li><a class="dropdown-item" href="{% url 'orders' %}">Orders</a></li>
+                                <li><a class="dropdown-item" href="{% url 'order-status' %}">Order Status</a></li>
                                 {% else %}
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
                                 <li><a class="dropdown-item" href="{% url 'orders' %}">Orders</a></li>
@@ -110,7 +110,7 @@
                     {% endif %}
                     {% if request.user.is_authenticated %}
                     <div class="d-flex float-end">
-                        <div class="pt-3 d-flex justify-content-between ">
+                        <div class="pt-3 d-flex justify-content-between">
                             <form action="{% url 'search_results' %}" method="GET">
                                 <input type="text" name="search" placeholder="Search..." class="form1">
                                 <button type="submit" class="btn text-white ">Search</button>
@@ -142,6 +142,9 @@
         {% block payment-gateway %} {% endblock payment-gateway %}
 
         <br><br>
+        {% if request.user.is_superuser %}
+
+        {% else %}
         <footer class="container-fluid bg-success fixed-bottom">
             <div class="d-flex justify-content-between">
                 <div class="text-white">
@@ -153,6 +156,7 @@
                 </div>
             </div>
         </footer>
+        {% endif %}
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
