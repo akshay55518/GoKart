@@ -5,7 +5,23 @@
 
 {% block main-content %}
 
-<h1>admin dashboard</h1>
+<div class="container">
+    <h1 class="text-center text-capitalize  ">{{request.user}} dashboard</h1>
+    <div class="users ">
+        {% for i in users %}
+        <p>{{i.username}}</p>
+        {% endfor %}
+    </div>
+    <div class="orders">
+        {% for i in orders %}
+        <p>{{i.product}}</p>
+        <span>{{i.status}}</span>
+        <img src="{{i.product.product_image.url}}" alt="">
+        {% endfor %}
+    </div>
+    
+</div>
+
 
 
 {% endblock main-content %}

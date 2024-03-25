@@ -1,9 +1,10 @@
 from django.urls import path
+from django.contrib import admin
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_view
-from .forms import LoginForm,MyPasswordChangeForm,MySetPasswordForm,MyPasswordResetForm
+from .forms import MyPasswordChangeForm,MySetPasswordForm,MyPasswordResetForm
 
 urlpatterns = [
     #home section
@@ -28,17 +29,12 @@ urlpatterns = [
     path('orderplaced/', views.orderplaced, name='orderplaced'),
     path('order_success/', views.order_success, name='order_success'),
     path('orders/',views.orders,name='orders'),
-    #payment
-    # path('paymentdone/',views.payment_done,name='paymentdone'),
-    
+        
     #cart button action
     path('pluscart/',views.plus_cart),
     path('minuscart/',views.minus_cart),
     # path('removecart/',views.remove_cart,name='remove-cart'),
     path('cart/remove/<int:cart_item_id>/', views.remove_from_cart, name='remove_from_cart'),
-    
-    #Admin section
-    path('admin-dashboard',views.admin_dashboard,name='admin-dashboard'),
     
     #wishlist
     path('wishlist/', views.wishlist, name='wishlist'),
@@ -50,7 +46,8 @@ urlpatterns = [
     
     #login authentication
     path('registration',views.CustomerRegistrationView.as_view(),name='customer-registration'),
-    path('accounts/login',auth_view.LoginView.as_view(template_name='app/login.html',authentication_form=LoginForm,redirect_authenticated_user='/profile'),name='login'),
+    path('login',views.user_login,name="login"),
+    # path('accounts/login',auth_view.LoginView.as_view(template_name='app/login.html',authentication_form=LoginForm,redirect_authenticated_user='/profile'),name='login'),
     path('passwordchange/',auth_view.PasswordChangeView.as_view(template_name='app/change-password.html',form_class=MyPasswordChangeForm, success_url='/passwordchangedone'),name='password-change'),
     path('passwordchangedone/',auth_view.PasswordChangeDoneView.as_view(template_name='app/password-changedone.html'),name='password-changedone'),
     path('logout/',views.logout_view,name='logout'),
@@ -60,6 +57,11 @@ urlpatterns = [
     path('password-reset-confirm/<uidb64>/<token>/',auth_view.PasswordResetConfirmView.as_view(template_name='app/password_reset_confirm.html',form_class=MySetPasswordForm), name="password_reset_confirm"),
     path('password-reset-complete/',auth_view.PasswordResetCompleteView.as_view(template_name='app/password_reset_complete.html'), name='password_reset_complete'),
 
+    #Admin section
+    path('admin-dashboard',views.admin_dashboard,name='admin-dashboard'),
     
     
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+admin.site.site_header='GoKart Admin DashBoard'
+admin.site.index_title = "Welcome to Admin Panel of GoKArt"

@@ -13,9 +13,9 @@ class CustomerRegistrationForm(UserCreationForm):
         model=User
         fields=['username','email','password1','password2']
         
-class LoginForm(AuthenticationForm):
-    username=UsernameField(widget=forms.TextInput(attrs={'autofocus':'True','class':'form-control'}))
-    password=forms.CharField(label='Password',widget=forms.PasswordInput(attrs={'autocomplete':'current-password','class':'form-control'}))
+# class LoginForm(AuthenticationForm):
+#     username=UsernameField(widget=forms.TextInput(attrs={'autofocus':'True','class':'form-control'}))
+#     password=forms.CharField(label='Password',widget=forms.PasswordInput(attrs={'autocomplete':'current-password','class':'form-control'}))
     
 class CustomerProfileForm(forms.ModelForm):
     class Meta:

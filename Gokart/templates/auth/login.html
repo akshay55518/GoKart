@@ -1,0 +1,45 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block title %}Login{% endblock title %}
+
+
+{% block main-content %}
+
+<!-- <link rel="stylesheet" href="{% static 'app/css/login.css'%}"> -->
+
+<div class="container w-50 mt-5 shadow-lg p-4">
+    
+    <h3 class="text-center">Login</h3>
+    <div>
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="alert-danger p-2  alert-{{msg.tags}}" role="alert">{{msg}}</div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <form  method="POST" novalidate class="p-1">
+        {% csrf_token %}
+        <div class="form-floating mb-1">
+            <input type="text" class="form-control" name="username" id="floatingInput" placeholder="name@example.com">
+            <label for="floatingInput">Username</label>
+          </div>
+          <div class="form-floating mb-3 ">
+            <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+          </div>
+        <div class="d-flex justify-content-center ">
+            <input type="submit" class="btn btn-primary" value="Login">
+        </div>
+        <br>
+        <div class="d-flex justify-content-center ">        
+            <small class="fw-bold "><a href="{% url 'password_reset' %}" class="text-decoration-none ">Forgot Password ?</a></small> 
+        </div>
+        <br>
+        <div class="text-center text-primary"><small>New to GoKart? <a href="{% url 'customer-registration' %}" class="text-danger text-decoration-none fw-bold ">Create an Account</a> </small></div>
+       </form>
+</div>
+
+    
+
+
+{% endblock main-content %}

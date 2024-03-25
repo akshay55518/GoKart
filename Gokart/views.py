@@ -3,25 +3,23 @@ from django.contrib.auth.views import PasswordResetDoneView
 from .models import Product,Category,Banner,Customer,WishListItem
 from django.views import View
 from django.contrib import messages
-from django.contrib.auth import authenticate
-from .forms import CustomerRegistrationForm,CustomerProfileForm,MyPasswordResetForm,LoginForm
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate,login,logout
+from .forms import CustomerRegistrationForm,CustomerProfileForm,MyPasswordResetForm
 from .models import *
 from django import utils
 from django.conf import settings
+from django.db.models import Avg
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.urls import reverse
 from django.http import JsonResponse
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from Ecommerce.settings import RAZOR_API_KEY,RAZOR_API_SECRET_KEY
-import razorpay
 
 #user autentication
 class CustomerRegistrationView(View):
     def get(self,request):
         form=CustomerRegistrationForm()
-        return render(request,'app/registration.html',locals())
+        return render(request,'auth/signin.html',locals())
     def post(self,request):
         form=CustomerRegistrationForm(request.POST)
         if form.is_valid():
@@ -29,19 +27,32 @@ class CustomerRegistrationView(View):
             messages.success(request,"Contragulation! User registered successfull")
         else:
             messages.warning(request,"Error in Registration")
-        return render(request,'app/registration.html',locals())
+        return render(request,'auth/signin.html',locals())
     
-# def login(request):
-#     return render(request,'app/login.html')
+def user_login(request):
+    if request.user.is_authenticated:
+        messages.warning(request, 'yeah your already login')
+        return redirect(home)
+    if request.method == "POST": 
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        user=authenticate(request, username=username, password=password)
+        print(user)
+        if user is not None and user.is_superuser:
+            login(request, user)
+            return redirect(admin_dashboard)
+        elif user is not None:
+            login(request, user)
+            return redirect(home)
+        else:
+            messages.warning(request, f'user is not match please create a account ')
+    return render(request,'auth/login.html',locals())
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
-
-
+    return redirect(user_login)
 
 def get_password_reset_url(request):
-    # email=MyPasswordResetForm()
     base64_encoded_id = utils.http.urlsafe_base64_encode(utils.encoding.force_bytes(request.id))
     token = PasswordResetTokenGenerator().make_token(request)
     reset_url_args = {'uidb64': base64_encoded_id, 'token': token}
@@ -49,8 +60,6 @@ def get_password_reset_url(request):
     reset_url = f'{settings.BASE_URL}{reset_path}'
     return reset_url
     # return render(request,'app/password_reset_done.html',locals())
-    
-    
     
 # Create your views here.
 def home(request):
@@ -108,7 +117,6 @@ def category(request,val):
         name="Others"
     return render(request,'app/category.html',locals())
 
-from django.db.models import Avg
 
 def productdetail(request,pk):
     totalitem=0
@@ -464,13 +472,10 @@ def search_results(request):
     return render(request,'app/search_results.html',locals())
 
     
-
 #admin section
 # @login_required
 def admin_dashboard(request):
-    user=request.user
-    if user.is_superadmin==1:
-        users=User.objects.all()
-        orders=OrderPlaced.objects.all()
-        return render(request,'admin/admin-dashboard.html',locals())
+    users=User.objects.all()
+    orders=OrderPlaced.objects.all()
+    return render(request,'admin/admin-dashboard.html',locals())
     
