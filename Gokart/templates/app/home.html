@@ -8,24 +8,14 @@
     <div class="carousel-inner">
         {% for banner in banner %}
         <div class="carousel-item active">
-            <img src="{{banner.banner_image.url}}" class="d-block mx-auto" width="1000" height="250" alt="{{banner.title}}">
+            <img src="{{banner.banner_image.url}}" class="d-block mx-auto" width="1000" height="250"
+                alt="{{banner.title}}">
         </div>
         {% endfor%}
     </div>
 </div>
 <br>
 {% endblock banner-slider %}
-
-{% block information %}
-<!-- <div class="container-fluid  ">
-    <div class="row bg-success text-center p-5 text-white border-bottom shadow">
-        <h1>Products</h1>
-        <small class="fs-5 ">Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit id optio soluta 
-            facere numquam consequuntur veniam voluptates saepe quidem quae mollitia labore illo nulla ab odio 
-            quos, officiis accusantium molestias?</small>
-    </div>
-</div> -->
-{% endblock information %}
 
 
 {% block main-content %}
@@ -35,75 +25,62 @@
     <h3>View Items</h3>
     <div class="row gap-3 d-flex justify-content-center ">
         {% for product in product %}
-    <div class="card shadow object-fit-contain " style="width: 18rem;">
-        <div class="d-flex justify-content-between">
-            <div>
-                <a  href="{% url 'product-detail' product.id %}" class="btn ">
-                    <span class="material-symbols-outlined">
-                        visibility
-                    </span>
-                </a>
-            </div>
-            <div>
+        <div class="card shadow object-fit-contain " style="width: 18rem;">
+            <div class="d-flex justify-content-end">
+                <div>
+                    <a href="{% url 'product-detail' product.id %}" class="btn ">
+                        <span class="material-symbols-outlined">
+                            visibility
+                        </span>
+                    </a>
+                </div>
+                <!-- <div>
                 <form action="{% url 'add_to_wishlist' product.id %}" method="post">
                     {% csrf_token %}
                     <button class="btn">
                         <span class="material-symbols-outlined">favorite</span>
                     </button>
                 </form>
-                <!-- <form id="wishlist-form" data-product-id="{{ product.id }}">
-                    <input type="hidden" name="product_id" value="{{ product.id }}">
-                    {% csrf_token %}
-                    <button type="button" class="btn">
-                        {% if wishlist %}
-                        <span class="material-symbols-outlined">favorite</span>
-                        {% else %}
-                        <span class="material-symbols-outlined">heart_broken</span>
-                        {% endif %}
-                    </button>
-                </form> -->
-                
+            </div> -->
+            </div>
+
+            <div class="container1">
+                <img src="{{product.product_image.url}}" class="card-img" alt="{{product.title}}" width="auto"
+                    height="250px">
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{product.title}}</h5>
+                <div>
+                    <small class="text-decoration-line-through ">Price:{{product.selling_price}}</small>
+                    <p class="card-text">Discount Price:{{product.discount_price}}</p>
+                </div>
             </div>
         </div>
-
-        <a href="{% url 'product-detail' product.id %}" class="text-decoration-none text-bg-dark ">
-            <div class="container1">
-                <img src="{{product.product_image.url}}" class="card-img" alt="{{product.title}}" width="auto" height="250px">
-                <!-- <h2 class="center1">{{product.title}}</h2> -->
-            </div>
-           
-            <div class="card-body">
-              <h5 class="card-title">{{product.title}}</h5>
-              <div>
-                <small class="text-decoration-line-through ">Price:{{product.selling_price}}</small>
-                <p class="card-text">Discount Price:{{product.discount_price}}</p>
-              </div>
-            </div>
-        </a>
-      </div>
-      {% endfor %}
-    </div>   
+        {% endfor %}
+    </div>
 </div>
 
 <br>
 
 <div class="container container1 card gap-3 p-3  ">
-<h3>Categories</h3>
-<div class="row d-flex justify-content-center gap-3 ">
-    {% for category in category %}
-    <div class="col-md-4 col-sm-4 mt-4  fadeInUp w-25 shadow" >
-        <div class="card object-fit-fill">
-            <a href="{% url 'category' category.id %}" class="text-decoration-none">
-                <div class="text-center">
-                    <img class="card-img" src="{{category.category_image.url}}" alt="{{category.title}}" width="50" height="100">
-                    <h4 class="card-footer ">{{category.title}}</h4>
-                </div>
-            </a>
+    <h3>Categories</h3>
+    <div class="row d-flex justify-content-center gap-3 ">
+        {% for category in category %}
+        <div class="col-md-4 col-sm-4 mt-4  fadeInUp w-25 shadow">
+            <div class="card object-fit-fill">
+                <a href="{% url 'category' category.id %}" class="text-decoration-none">
+                    <div class="text-center">
+                        <img class="card-img" src="{{category.category_image.url}}" alt="{{category.title}}" width="50"
+                            height="100">
+                </a>
+                <h4 class="card-footer ">{{category.title}}</h4>
+            </div>
+
         </div>
     </div>
     {% endfor %}
 </div>
-    
+
 </div>
 
 

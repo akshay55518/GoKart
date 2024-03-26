@@ -1,5 +1,4 @@
 from django.db import models
-# from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 # Create your models here.
@@ -76,16 +75,6 @@ class Cart(models.Model):
     @property
     def total_cost(self):
         return self.quantity * self.Product.discount_price
-    
-
-
-# class Payment(models.Model):
-#     user=models.ForeignKey(User,on_delete=models.CASCADE)
-#     amount=models.IntegerField(null=True)
-#     razorpay_order_id=models.CharField(max_length=100,blank=True,null=True)
-#     razorpay_payment_status=models.CharField(max_length=100,blank=True,null=True)
-#     razorpay_payment_id=models.CharField(max_length=100,blank=True,null=True)
-#     paid=models.BooleanField(default=False)
 
 PAYMENT=(
     ("COD","Cash on Delivery"),
@@ -108,7 +97,6 @@ class OrderPlaced(models.Model):
     ordered_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, choices=STATUS, default='Pending')
     payment = models.CharField(max_length=100, choices=PAYMENT, default='COD')
-
     @property
     def total_cost(self):
         return self.quantity * self.product.discount_price  # Adjusted calculation based on product's discount price

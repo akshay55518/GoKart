@@ -1,6 +1,6 @@
 {% extends "app/base.html" %}
 {% load static %}
-{% block title %}ProductDetail{% endblock title %}
+{% block title %}Product Detail{% endblock title %}
 
 
 {% block main-content %}
@@ -24,11 +24,12 @@
                         <a href="{% url 'add_to_wishlist' product.id %}" class="text-decoration-none ">
                             <button class="btn">
                                 {% if wishlist %}
-                                <span class="material-symbols-outlined">favorite</span>
+                                <span class="material-symbols-outlined" style="color: red;">favorite</span>
                                 {% else %}
-                                <span class="material-symbols-outlined">heart_broken</span>
+                                <span class="material-symbols-outlined">favorite</span>
                                 {% endif %}
                             </button>
+                        </a>
                     </div>
 
                     <div class="mb-3 d-flex justify-content-between">

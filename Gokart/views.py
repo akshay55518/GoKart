@@ -63,12 +63,11 @@ def get_password_reset_url(request):
     
 # Create your views here.
 def home(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     banner=Banner.objects.all()
     category=Category.objects.all()
     product=Product.objects.all()
@@ -76,30 +75,27 @@ def home(request):
     return render(request,'app/home.html',locals())
 
 def aboutus(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     return render(request,'app/about-us.html',locals())
 
 def contactus(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     return render(request,'app/contact-us.html',locals())
 
 def category(request,val):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     product=Product.objects.filter(category=val)
     if val=='Mo':
         name='MobilePhone'
@@ -118,13 +114,15 @@ def category(request,val):
     return render(request,'app/category.html',locals())
 
 
-def productdetail(request,pk):
-    totalitem=0
+def product_detail(request,pk):
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
+        wishlist=WishListItem.objects.filter(user=request.user, product=pk).exists()
+    else:
+        wishlist=False
     product=Product.objects.get(pk=pk)
     review=Review.objects.filter(product=pk)
     reviews = product.reviews.order_by('-created_at')[:5] # get the top 5 reviews for this product
@@ -144,22 +142,21 @@ def add_review(request,pk):
             rating=rating, 
             comment=comment
             )
-        return render(request, 'app/product-detail.html',locals())
+        return redirect(product_detail, pk)
     
 def delete_review(request, pk):
     review = get_object_or_404(Review, pk=pk)
     if request.user == review.user:
         review.delete()
-        return redirect('productdetail', pk=pk)  # Redirect to the product detail page
+        return redirect(product_detail, pk) 
 
 @login_required(login_url='login')
 def profileview(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     if request.method=='POST':
         form=CustomerProfileForm(request.POST)
         if form.is_valid():
@@ -183,23 +180,21 @@ def profileview(request):
 
 @login_required(login_url='login')
 def address(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     add=Customer.objects.filter(user=request.user)
     return render(request,'app/address.html',locals()) 
 
 @login_required(login_url='login')
 def updateaddress(request,pk):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     if request.method=='POST':
         form=CustomerProfileForm(request.POST)
         if form.is_valid():
@@ -229,27 +224,26 @@ def deleteaddress(request,pk):
     
 #cart section
 @login_required(login_url='login')
-def add_to_card(request):
-    totalitem=0
+def add_to_cart(request):
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     user=request.user
     product_id=request.GET.get('prod_id')
     product=Product.objects.get(id=product_id)
     Cart(user=user,product=product).save()
-    return redirect('/cart')
-    
+    return redirect(productdetail,product_id)
+
+
 @login_required(login_url='login')
 def show_cart(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     user=request.user
     cart=Cart.objects.filter(user=user)
     amount=0
@@ -266,7 +260,6 @@ def remove_from_cart(request,cart_item_id):
     cart_item = get_object_or_404(Cart, id=cart_item_id, user=request.user)
     cart_item.delete()
     return redirect(show_cart)
-
 
 def plus_cart(request):
     if request.method=='GET':
@@ -335,16 +328,13 @@ def minus_cart(request):
 #         }
 #         return JsonResponse(data)
 
-    
-
 
 def checkout(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     if request.method=='GET':
         user=request.user
         # print(user)
@@ -393,33 +383,30 @@ def orderplaced(request):
         return redirect('checkout')
     
 def order_success(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     return render(request, 'app/order_placed.html',locals())
 
            
 def orders(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     user=request.user
     order=OrderPlaced.objects.filter(user=user)
     return render(request, "app/orders.html", locals())
 
 def wishlist(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     product=Product.objects.all()
     wishlist_items=WishListItem.objects.filter(user=request.user)
     return render(request,'app/wishlist.html',locals())
@@ -429,25 +416,7 @@ def add_to_wishlist(request, product_id):
     wishlist_item, created = WishListItem.objects.get_or_create(user=request.user,product=product)
     if created:
         pass
-    return redirect('wishlist')
-# from django.views.decorators.csrf import csrf_exempt
-
-# @csrf_exempt  # This decorator is used to exempt CSRF protection for this view
-# def add_to_wishlist(request):
-#     if request.method == 'POST':
-#         product_id = request.POST.get('product_id')  # Assuming 'product_id' is sent in the request data
-#         product = get_object_or_404(Product, id=product_id)
-#         # Check if the product is already in the wishlist
-#         if Wishlist.objects.filter(product=product, user=request.user).exists():
-#             # If already in the wishlist, remove it
-#             Wishlist.objects.filter(product=product, user=request.user).delete()
-#             return JsonResponse({'success': False})
-#         else:
-#             # If not in the wishlist, add it
-#             Wishlist.objects.create(product=product, user=request.user)
-#             return JsonResponse({'success': True})
-#     else:
-#         return JsonResponse({'error': 'Invalid request method'}, status=400)
+    return redirect(product_detail, product_id)
 
 def remove_from_wishlist(request, wishlist_item_id):
     wishlist_item = get_object_or_404(WishListItem, id=wishlist_item_id, user=request.user)
@@ -455,12 +424,11 @@ def remove_from_wishlist(request, wishlist_item_id):
     return redirect('wishlist')
 
 def search_results(request):
-    totalitem=0
+    cartitem=0
+    wishlistitem=0
     if request.user.is_authenticated:
-        totalitem=len(Cart.objects.filter(user=request.user))
-    totalitem1=0
-    if request.user.is_authenticated:
-        totalitem1=len(WishListItem.objects.filter(user=request.user))
+        cartitem=len(Cart.objects.filter(user=request.user))
+        wishlistitem=len(WishListItem.objects.filter(user=request.user))
     query=request.GET.get('search')
     if query:
         results=Product.objects.filter(

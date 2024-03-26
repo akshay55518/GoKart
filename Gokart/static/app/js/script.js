@@ -22,6 +22,31 @@
 //     }
 // })
 
+// $(document).ready(function(){
+//     $('#add-to-cart-form').on('submit', function(e){
+//         e.preventDefault();
+//         var form = $(this);
+//         var url = form.attr('data-url');
+//         $.ajax({
+//             type: 'POST',
+//             url: url,
+//             data: form.serialize(),
+//             dataType: 'json',
+//             success: function(data){
+//                 if (data.status === 'success') {
+//                     alert('Item added to cart successfully');
+//                     // Optionally, update the cart count or show a success message
+//                 } else {
+//                     alert('Error: ' + data.message);
+//                 }
+//             },
+//             error: function(xhr, textStatus, errorThrown){
+//                 alert('Error: ' + xhr.responseText);
+//             }
+//         });
+//     });
+// });
+
 $('.plus-cart').click(function(){
     var id=$(this).attr("pid").toString();
     var eml=this.parentNode.children[2] 
