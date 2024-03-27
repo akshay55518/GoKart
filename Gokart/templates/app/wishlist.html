@@ -5,44 +5,46 @@
 {% block main-content %}
 
 <div class="container">
-    <h1 class="text-center ">My Wishlist</h1>
-    <div class="row gap-3 ">
+    <h1 class="text-center">My Wishlist</h1>
+    <div class="row gap-3 mt-2  ">
         {% if wishlist_items %}
         {% for item in wishlist_items %}
-        
 
-        <div class="card p-4 ">
-            
-                
-                    <a href="{% url 'product-detail' item.product.id %}" class="text-decoration-none text-black ">
-                        <div class=" d-flex justify-content-between ">
-                    <img src="{{ item.product.product_image.url }}" alt="{{ item.product.title }}" width="100px" height="100px">
+
+        <div class="card p-4">
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'product-detail' item.product.id %}" class="text-decoration-none text-dark  ">
                     <div>
-                        <p class="fw-bold ">{{ item.product.title }}</p>
-                        <p class="d-inline-block text-truncate " style="max-width: 300px;">{{item.product.description}}</p>
+                        <img src="{{ item.product.product_image.url }}" alt="{{ item.product.title }}" width="100px"
+                            height="100px">
                     </div>
-                    <p class="fst-italic ">
+                    <div>
+                        <p class="fw-bold " style="font-size: 20px;">{{ item.product.title }}</p>
+                        <p class=" text-truncate " style="max-width: 300px;">{{item.product.description}}</p>
+                    </div>
+                    <div class="fst-italic fw-bold">
+                        <span class="material-symbols-outlined">currency_rupee</span>{{item.product.discount_price}}
+                    </div>
+                </a>
+                <div>
+                    <a href="{% url 'remove_from_wishlist' item.id %}" class="btn btn-danger">
                         <span class="material-symbols-outlined">
-                            currency_rupee
-                            </span>{{item.product.discount_price}}</p>
-                        </div>
-                        </a>
-                
-          
-
-           <div class="d-flex justify-content-center align-items-center ">
-                <a href="{% url 'remove_from_wishlist' item.id %}" class="btn btn-danger w-25 ">Remove</a>
-           </div> 
+                            delete
+                        </span>
+                    </a>
+                </div>
+            </div>
+            
         </div>
 
         {% endfor %}
         {% else %}
         <p class="text-center ">Your wishlist is empty.</p>
         {% endif %}
-        
+
     </div>
-    
-    
+
+
 </div>
 
 {% endblock main-content %}

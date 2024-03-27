@@ -33,9 +33,9 @@
                     </div>
 
                     <div class="mb-3 d-flex justify-content-between">
-                        <small class="h6 text-decoration-line-through text-danger ">
-                            <span class="material-symbols-outlined">currency_rupee</span>
-                            {{product.selling_price}}</small>
+                        <small class="h6">
+                            <span class="material-symbols-outlined ">currency_rupee</span>
+                            <strong class="text-decoration-line-through text-danger">{{product.selling_price}} </strong> <small>{{percent|floatformat:2}}%</small> </small>
                         <p class="h4"><span class="material-symbols-outlined">currency_rupee</span>
                             {{product.discount_price}}</p>
                     </div>

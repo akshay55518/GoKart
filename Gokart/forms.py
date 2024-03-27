@@ -13,10 +13,6 @@ class CustomerRegistrationForm(UserCreationForm):
         model=User
         fields=['username','email','password1','password2']
         
-# class LoginForm(AuthenticationForm):
-#     username=UsernameField(widget=forms.TextInput(attrs={'autofocus':'True','class':'form-control'}))
-#     password=forms.CharField(label='Password',widget=forms.PasswordInput(attrs={'autocomplete':'current-password','class':'form-control'}))
-    
 class CustomerProfileForm(forms.ModelForm):
     class Meta:
         model=Customer
@@ -51,12 +47,3 @@ class MyPasswordResetForm(PasswordResetForm):
 class MySetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(label='New password', widget=forms.PasswordInput(attrs={'autocomplete': 'new-password', 'class': 'form-control'}))
     new_password2 = forms.CharField(label='New password confirmation', widget=forms.PasswordInput(attrs={'autocomplete': 'new-password', 'class': 'form-control'}))
-
-# class CheckoutForm(forms.Form):
-#     address = forms.ModelChoiceField(queryset=None, widget=forms.RadioSelect)
-
-#     def __init__(self, *args, **kwargs):
-#         addresses = kwargs.pop('addresses', None)
-#         super(CheckoutForm, self).__init__(*args, **kwargs)
-#         if addresses:
-#             self.fields['address'].queryset = addresses

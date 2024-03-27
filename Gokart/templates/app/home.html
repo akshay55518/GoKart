@@ -68,14 +68,12 @@
         {% for category in category %}
         <div class="col-md-4 col-sm-4 mt-4  fadeInUp w-25 shadow">
             <div class="card object-fit-fill">
-                <a href="{% url 'category' category.id %}" class="text-decoration-none">
+                <a href="{% url 'category' category.id %}" class="text-decoration-none text-dark ">
                     <div class="text-center">
-                        <img class="card-img" src="{{category.category_image.url}}" alt="{{category.title}}" width="50"
-                            height="100">
-                </a>
+                        <img class="card-img" src="{{category.category_image.url}}" alt="{{category.title}}" width="50" height="100">
                 <h4 class="card-footer ">{{category.title}}</h4>
+            </a>
             </div>
-
         </div>
     </div>
     {% endfor %}

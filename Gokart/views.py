@@ -80,6 +80,7 @@ def aboutus(request):
     if request.user.is_authenticated:
         cartitem=len(Cart.objects.filter(user=request.user))
         wishlistitem=len(WishListItem.objects.filter(user=request.user))
+    category=Category.objects.all()
     return render(request,'app/about-us.html',locals())
 
 def contactus(request):
@@ -88,6 +89,7 @@ def contactus(request):
     if request.user.is_authenticated:
         cartitem=len(Cart.objects.filter(user=request.user))
         wishlistitem=len(WishListItem.objects.filter(user=request.user))
+    category=Category.objects.all()
     return render(request,'app/contact-us.html',locals())
 
 def category(request,val):
@@ -97,22 +99,9 @@ def category(request,val):
         cartitem=len(Cart.objects.filter(user=request.user))
         wishlistitem=len(WishListItem.objects.filter(user=request.user))
     product=Product.objects.filter(category=val)
-    if val=='Mo':
-        name='MobilePhone'
-    elif val=='El':
-        name="Electronics"
-    elif  val=="Fa":
-        name="Fashion"
-    elif val=='Ap':
-        name="Appliances"
-    elif val=='Gr':
-        name="Groceries"
-    elif val=='Me':
-        name="Medicine"
-    else:
-        name="Others"
+    c=Category.objects.filter(id=val)
+    category=Category.objects.all()
     return render(request,'app/category.html',locals())
-
 
 def product_detail(request,pk):
     cartitem=0
@@ -124,11 +113,13 @@ def product_detail(request,pk):
     else:
         wishlist=False
     product=Product.objects.get(pk=pk)
+    reduction=product.selling_price-product.discount_price
+    percent=(reduction/product.selling_price)*100
     review=Review.objects.filter(product=pk)
-    reviews = product.reviews.order_by('-created_at')[:5] # get the top 5 reviews for this product
+    reviews = product.reviews.order_by('-created_at')[:5]
     average_rating = review.aggregate(Avg('rating'))['rating__avg']
+    category=Category.objects.all()
     return render(request,'app/product-detail.html',locals())
-
 
 def add_review(request,pk):
     if request.method == 'POST':
@@ -176,6 +167,7 @@ def profileview(request):
             return redirect(profileview)
     else:
         form=CustomerProfileForm()
+        category=Category.objects.all()
         return render(request,"app/profile-view.html", locals())
 
 @login_required(login_url='login')
@@ -186,6 +178,7 @@ def address(request):
         cartitem=len(Cart.objects.filter(user=request.user))
         wishlistitem=len(WishListItem.objects.filter(user=request.user))
     add=Customer.objects.filter(user=request.user)
+    category=Category.objects.all()
     return render(request,'app/address.html',locals()) 
 
 @login_required(login_url='login')
@@ -213,6 +206,7 @@ def updateaddress(request,pk):
     else:
         add=Customer.objects.get(pk=pk)
         form=CustomerProfileForm(instance=add)
+        category=Category.objects.all()
         return render(request,'app/address-update.html',locals())
     
 @login_required(login_url='login')
@@ -234,7 +228,7 @@ def add_to_cart(request):
     product_id=request.GET.get('prod_id')
     product=Product.objects.get(id=product_id)
     Cart(user=user,product=product).save()
-    return redirect(productdetail,product_id)
+    return redirect(product_detail,product_id)
 
 
 @login_required(login_url='login')
@@ -254,6 +248,7 @@ def show_cart(request):
         totalamount=amount
     else:
         totalamount=amount+40
+    category=Category.objects.all()
     return render(request,'app/add-tocart.html',locals())
 
 def remove_from_cart(request,cart_item_id):
@@ -337,11 +332,8 @@ def checkout(request):
         wishlistitem=len(WishListItem.objects.filter(user=request.user))
     if request.method=='GET':
         user=request.user
-        # print(user)
         customer=Customer.objects.filter(user=user)
-        # print(customer)
         cart_item=Cart.objects.filter(user=user)
-        # print(cart_item)
         famount=0
         for p in cart_item:
             value=p.quantity*p.product.discount_price
@@ -354,8 +346,7 @@ def checkout(request):
             totalamount=famount+100
         totalamount1=totalamount*100
         order_amount=float(totalamount1)
-        # print(order_amount)
-        # print(p.quantity)
+        category=Category.objects.all()
         return render(request,'app/checkout.html',locals())
 
 def orderplaced(request):
@@ -377,6 +368,7 @@ def orderplaced(request):
         )
         cart_item.delete()
         messages.success(request, 'Order placed successfully!')
+        category=Category.objects.all()
         return redirect('order_success')
     else:
         messages.error(request, 'No items found in the cart.')
@@ -388,6 +380,7 @@ def order_success(request):
     if request.user.is_authenticated:
         cartitem=len(Cart.objects.filter(user=request.user))
         wishlistitem=len(WishListItem.objects.filter(user=request.user))
+    category=Category.objects.all()
     return render(request, 'app/order_placed.html',locals())
 
            
@@ -399,6 +392,7 @@ def orders(request):
         wishlistitem=len(WishListItem.objects.filter(user=request.user))
     user=request.user
     order=OrderPlaced.objects.filter(user=user)
+    category=Category.objects.all()
     return render(request, "app/orders.html", locals())
 
 def wishlist(request):
@@ -409,6 +403,7 @@ def wishlist(request):
         wishlistitem=len(WishListItem.objects.filter(user=request.user))
     product=Product.objects.all()
     wishlist_items=WishListItem.objects.filter(user=request.user)
+    category=Category.objects.all()
     return render(request,'app/wishlist.html',locals())
 
 def add_to_wishlist(request, product_id):
@@ -437,6 +432,7 @@ def search_results(request):
             )
     else:
         results=None
+    category=Category.objects.all()
     return render(request,'app/search_results.html',locals())
 
     

@@ -33,7 +33,6 @@ urlpatterns = [
     #cart button action
     path('pluscart/',views.plus_cart),
     path('minuscart/',views.minus_cart),
-    # path('removecart/',views.remove_cart,name='remove-cart'),
     path('cart/remove/<int:cart_item_id>/', views.remove_from_cart, name='remove_from_cart'),
     
     #wishlist
@@ -47,11 +46,11 @@ urlpatterns = [
     #login authentication
     path('registration',views.CustomerRegistrationView.as_view(),name='customer-registration'),
     path('login',views.user_login,name="login"),
-    # path('accounts/login',auth_view.LoginView.as_view(template_name='app/login.html',authentication_form=LoginForm,redirect_authenticated_user='/profile'),name='login'),
     path('passwordchange/',auth_view.PasswordChangeView.as_view(template_name='app/change-password.html',form_class=MyPasswordChangeForm, success_url='/passwordchangedone'),name='password-change'),
     path('passwordchangedone/',auth_view.PasswordChangeDoneView.as_view(template_name='app/password-changedone.html'),name='password-changedone'),
     path('logout/',views.logout_view,name='logout'),
     
+    #password reset
     path('password-reset/',auth_view.PasswordResetView.as_view(template_name='app/password_reset.html',form_class=MyPasswordResetForm), name='password_reset'),
     path('password-reset/done/',auth_view.PasswordResetDoneView.as_view(template_name='app/password_reset_done.html'), name="password_reset_done"),
     path('password-reset-confirm/<uidb64>/<token>/',auth_view.PasswordResetConfirmView.as_view(template_name='app/password_reset_confirm.html',form_class=MySetPasswordForm), name="password_reset_confirm"),
