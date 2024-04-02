@@ -44,7 +44,8 @@ urlpatterns = [
     path('search/', views.search_results, name='search_results'),
     
     #login authentication
-    path('registration',views.CustomerRegistrationView.as_view(),name='customer-registration'),
+    # path('registration',views.CustomerRegistrationView.as_view(),name='customer-registration'),
+    path('registration',views.customerRegistration,name='customer-registration'),
     path('login',views.user_login,name="login"),
     path('passwordchange/',auth_view.PasswordChangeView.as_view(template_name='app/change-password.html',form_class=MyPasswordChangeForm, success_url='/passwordchangedone'),name='password-change'),
     path('passwordchangedone/',auth_view.PasswordChangeDoneView.as_view(template_name='app/password-changedone.html'),name='password-changedone'),
@@ -68,6 +69,9 @@ urlpatterns = [
     path('delete_product/<str:product_id>/', views.delete_product, name='delete_product'),
     path('order-status',views.order_status,name='order-status'),
     path('order-status/<int:order_id>/update/', views.update_order_status, name='update_order_status'),
+    path('registered-user/',views.user_view,name='registered-users'),
+    path('user-detail/<str:pk>/',views.user_details,name='user-detail'),
+    path('delete-user/<str:pk>/',views.delete_user,name='delete-user'),
 
     
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

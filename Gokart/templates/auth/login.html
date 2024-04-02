@@ -5,25 +5,22 @@
 
 {% block main-content %}
 
-<!-- <link rel="stylesheet" href="{% static 'app/css/login.css'%}"> -->
-
-<div class="container w-50 mt-5 shadow-lg p-4">
-    
+<div class="container w-25 mt-5 shadow-lg p-4">
     <h3 class="text-center">Login</h3>
     <div>
         {% if messages %}
         {% for msg in messages %}
-        <div class="alert-danger p-2  alert-{{msg.tags}}" role="alert">{{msg}}</div>
+        <div class="alert-{{msg.tags}} p-2" role="alert">{{msg}}</div>
         {% endfor %}
         {% endif %}
     </div>
-    <form  method="POST" novalidate class="p-1">
+    <form  method="POST" novalidate class="p-1" autocomplete="off">
         {% csrf_token %}
         <div class="form-floating mb-1">
             <input type="text" class="form-control" name="username" id="floatingInput" placeholder="name@example.com">
             <label for="floatingInput">Username</label>
           </div>
-          <div class="form-floating mb-3 ">
+          <div class="form-floating mb-3">
             <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Password</label>
           </div>

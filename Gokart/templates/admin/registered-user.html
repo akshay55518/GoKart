@@ -1,0 +1,48 @@
+{% extends "app/base.html" %}
+{% load static %}
+{% block title %}Registered User{% endblock title %}
+
+{% block main-content %}
+
+<div class="container">
+    <h1 class="text-center">Registered Users</h1>
+    <!-- Table showing registered users -->
+
+    <table class="table mt-5 table-dark table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Last Login</th>
+                <th scope="col">Joined Date</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                    <a href="{% url 'user-detail' user.id %}" class="text-decoration-none text-white  ">
+                        {{ user.username }}
+                    </a>
+                </td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.last_login }}</td>
+                <td>{{ user.date_joined }}</td>
+                <td>
+                    <a href="{% url 'delete-user' user.id %}" class="btn btn-danger">
+                        <span class="material-symbols-outlined">delete</span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+
+{% endblock main-content %}

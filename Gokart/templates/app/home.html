@@ -4,15 +4,27 @@
 
 
 {% block banner-slider %}
-<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for banner in banner %}
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+        {% endfor %}
+    </div>
     <div class="carousel-inner">
         {% for banner in banner %}
-        <div class="carousel-item active">
-            <img src="{{banner.banner_image.url}}" class="d-block mx-auto" width="1000" height="250"
-                alt="{{banner.title}}">
-        </div>
-        {% endfor%}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ banner.banner_image.url }}" class="d-block mx-auto  w-75" width="1000" height="250" alt="{{ banner.title }}">
+            </div>
+        {% endfor %}
     </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
 <br>
 {% endblock banner-slider %}
@@ -34,14 +46,6 @@
                         </span>
                     </a>
                 </div>
-                <!-- <div>
-                <form action="{% url 'add_to_wishlist' product.id %}" method="post">
-                    {% csrf_token %}
-                    <button class="btn">
-                        <span class="material-symbols-outlined">favorite</span>
-                    </button>
-                </form>
-            </div> -->
             </div>
 
             <div class="container1">

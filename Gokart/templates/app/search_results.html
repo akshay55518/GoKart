@@ -5,25 +5,24 @@
 {% block main-content %}
 
 <div class="container">
-    <h3>Search Results for "{{ query }}"</h3>
+    <h1 class="text-center ">Search Results for "{{ query }}"</h1>
     {% if results %}
             {% for i in results %}
-            <div class="card w-50 p-4  " >
-                <a href="{% url 'product-detail' i.id %}" class="text-decoration-none text-black ">
-                <div class="d-flex justify-content-between gap-3 ">
+            <div class="card shadow p-4 mb-3" >
+                <a href="{% url 'product-detail' i.id %}" class="text-decoration-none text-dark">
+                <div class="d-flex gap-5">
                 <img src="{{i.product_image.url}}" alt="{{i.title}}"  height=200 width=150/>
                 <div >
-                    <p class="">{{ i.title }}</p>
-                    <p>{{i.selling_price}}</p>
-                    <p class="d-inline-block text-truncate " style="max-width: 350px;">{{i.description}}</p>
+                    <h3 class=""><span>Product Name:</span> {{ i.title }}</h3>
+                    <h5>Product Price: {{i.selling_price}}</h5>
+                    <h6 class="d-inline-block text-truncate " style="max-width: 350px;">Product Description: {{i.description}}</h6>
                 </div>
-                
                 </div>
             </a>
             </div>  
             {% endfor %}
     {% else %}
-        <p>No results found.</p>
+        <p class="text-center ">No results found.</p>
     {% endif %}
 </div>
 

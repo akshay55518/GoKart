@@ -1,13 +1,13 @@
 {% extends 'app/base.html' %}
 {% load static %}
-{% block title %}Cart{% endblock title %}
+{% block title %}add to Cart{% endblock title %}
 
 {% block main-content %}
 
 <div class="container">
+    <h1 class="text-center">Your Cart</h1>
     <div class="row p-3 ">
         {% if cart %}
-        <h1 class="text-center mb-3 ">Your Shopping Cart</h1>
         <div class="col-sm-8 ">
             <div class="card p-3">
                 <div class="card-body">
@@ -74,12 +74,14 @@
                     </strong></span>
                 </li>
             </ul>
-            <div class="d-flex justify-content-center "><a href="{% url 'checkout' %}" class="btn btn-primary w-50 ">Place order</a></div>
+            <div class="d-flex justify-content-center ">
+                <a href="{% url 'checkout' %}" class="btn btn-primary w-50 ">Place order</a>
+            </div>
         </div>
     </div>
 </div>
 {% else%}
-<h1 class="text-center mb-5 ">Empty Cart</h1>
+<p class="text-center mb-5">No items in cart!</p>
     </div>
     {% endif %}
 </div>

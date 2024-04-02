@@ -1,15 +1,20 @@
 {% extends "app/base.html" %}
 {% load static %}
-{% block title %}Order Status{% endblock title %}
+{% block title %}User Details{% endblock title %}
 
 {% block main-content %}
 
 <div class="container gap-3">
-    <h2 class="text-center ">Order Management</h2>
-    {% for i in order %}
-    <div class="shadow card w-75 mb-3 mt-5">
-        <div class="card-header d-flex justify-content-between">
-            <h5>User: {{i.user}}</h5>
+    <h2 class="text-center ">User Details-{{ user|capfirst }}
+    </h2>
+    {% for i in orders %}
+    {% if forloop.last %}
+        <h6>Total number of items ordered by {{ user|capfirst }}: {{ forloop.counter }}</h6>
+    {% endif %}
+{% endfor %}
+    {% for i in orders %}
+    <div class="shadow card w-75 mb-3 mt-5 ">
+        <div class="card-header d-flex justify-content-end">
             <p>Ordered Date: {{i.ordered_date}}</p>
         </div>
         <div class="card-body d-flex justify-content-around  gap-5">
@@ -48,13 +53,13 @@
             </div>
             <div>
                 <h5>Order Status:{{i.status}}</h5>
-                {% if i.status == 'Rejected' %}
-                <form method="post" action="{% url 'update_order_status' i.id %}" disabled>
+                {% if i.status == 'Rejected' or i.status == 'Delivered' %}
+                <form method="post" action="" disabled>
                     {% else %}
-                <form method="post" action="{% url 'update_order_status' i.id %}">
+                <form method="post" action="">
                     {% csrf_token %}
                     <label for="status" class="form-label">Status:</label><br>
-                    <select id="status" name="status" class="form-select">
+                    <select id="status" name="status" class="form-select" disabled >
                         <option value="{{i.status}}" selected disabled>{{i.status}}</option>
                         <option value="Accepted">Accepted</option>
                         <option value="Packed">Packed</option>
@@ -64,9 +69,13 @@
                         <option value="Delivered">Delivered</option>
                     </select>
                     <br>
-                    <div class="d-flex justify-content-center">
+                    <!-- <div class="d-flex justify-content-center">
+                        {% if i.status == 'Delivered' or i.status == 'Rejected' %}
+                        <button type="submit" class="btn btn-success" disabled >Update</button>
+                        {% else %}
                         <button type="submit" class="btn btn-success">Update</button>
-                    </div>
+                        {% endif %}
+                    </div> -->
                 </form>
                 {% endif %}
             </div>
@@ -78,6 +87,7 @@
     </div>
     {% endfor %}
 </div>
+
 
 
 {% endblock main-content %}
