@@ -72,6 +72,8 @@ urlpatterns = [
     path('registered-user/',views.user_view,name='registered-users'),
     path('user-detail/<str:pk>/',views.user_details,name='user-detail'),
     path('delete-user/<str:pk>/',views.delete_user,name='delete-user'),
+    path('admin-search/', views.admin_search, name='admin_search'),
+
 
     
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

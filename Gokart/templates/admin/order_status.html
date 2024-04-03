@@ -24,51 +24,55 @@
                         <td>Quantity:</td>
                         <td>{{i.quantity}}</td>
                     </tr>
-                    <tr>    
+                    <tr>
                         <td>Address:</td>
                         <td>{{i.customer.name}}</td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td>{{i.customer.address}}<td>
+                        <td>{{i.customer.address}}
+                        <td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td>{{i.customer.city}}, {{i.customer.state}}<td>
+                        <td>{{i.customer.city}}, {{i.customer.state}}
+                        <td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td>{{i.customer.zipcode}}<td>
+                        <td>{{i.customer.zipcode}}
+                        <td>
                     </tr>
                     <tr>
                         <td>Mobile:</td>
-                        <td>{{i.customer.mobile}}<td>
+                        <td>{{i.customer.mobile}}
+                        <td>
                     </tr>
                 </table>
             </div>
             <div>
                 <h5>Order Status:{{i.status}}</h5>
-                {% if i.status == 'Rejected' %}
+                {% if i.status == 'Rejected' or i.status == 'Delivered' %}
                 <form method="post" action="{% url 'update_order_status' i.id %}" disabled>
                     {% else %}
-                <form method="post" action="{% url 'update_order_status' i.id %}">
-                    {% csrf_token %}
-                    <label for="status" class="form-label">Status:</label><br>
-                    <select id="status" name="status" class="form-select">
-                        <option value="{{i.status}}" selected disabled>{{i.status}}</option>
-                        <option value="Accepted">Accepted</option>
-                        <option value="Packed">Packed</option>
-                        <option value="Rejected">Rejected</option>
-                        <option value="Pending">Pending</option>
-                        <option value="On the Way">On the Way</option>
-                        <option value="Delivered">Delivered</option>
-                    </select>
-                    <br>
-                    <div class="d-flex justify-content-center">
-                        <button type="submit" class="btn btn-success">Update</button>
-                    </div>
-                </form>
-                {% endif %}
+                    <form method="post" action="{% url 'update_order_status' i.id %}">
+                        {% csrf_token %}
+                        <label for="status" class="form-label">Status:</label><br>
+                        <select id="status" name="status" class="form-select">
+                            <option value="{{i.status}}" selected disabled>{{i.status}}</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Packed">Packed</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Pending">Pending</option>
+                            <option value="On the Way">On the Way</option>
+                            <option value="Delivered">Delivered</option>
+                        </select>
+                        <br>
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-success">Update</button>
+                        </div>
+                    </form>
+                    {% endif %}
             </div>
 
         </div>

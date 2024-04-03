@@ -588,7 +588,7 @@ def delete_product(request, product_id):
 
 
 def order_status(request):
-    order = OrderPlaced.objects.all()
+    order = OrderPlaced.objects.all().order_by('-ordered_date')
     return render(request, "admin/order_status.html", locals())
 
 
@@ -618,3 +618,11 @@ def user_details(request, pk):
     user = User.objects.get(id=pk)
     orders = OrderPlaced.objects.filter(user=user)
     return render(request, "admin/user-detail.html", locals())
+
+def admin_search(request):
+    query = request.GET.get("search")
+    if query:
+        results = User.objects.filter(models.Q(username__icontains=query) | models.Q(email__icontains=query)) 
+    else:
+        results = None
+    return render(request, "admin/search_results.html", locals())

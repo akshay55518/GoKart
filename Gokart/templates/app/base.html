@@ -108,14 +108,24 @@
                         </li>
                     </ul>
                     {% endif %}
+                    
                     {% if request.user.is_authenticated %}
                     <div class="d-flex float-end">
+                        {% if request.user.is_superuser %}
+                        <div class="pt-3 d-flex justify-content-between">
+                            <form action="{% url 'admin_search' %}" method="GET">
+                                <input type="text" name="search" placeholder="Search..." class="form1">
+                                <button type="submit" class="btn text-white ">Search</button>
+                            </form>
+                        </div>
+                        {% else %}
                         <div class="pt-3 d-flex justify-content-between">
                             <form action="{% url 'search_results' %}" method="GET">
                                 <input type="text" name="search" placeholder="Search..." class="form1">
                                 <button type="submit" class="btn text-white ">Search</button>
                             </form>
                         </div>
+                        {% endif %}
 
                         <ul>
                             <li class="navbar-nav ">
